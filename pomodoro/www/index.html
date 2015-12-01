@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <!-- we also need to get route of AJS for some reason -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
+  
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<!--    <link href="lib/ionic/css/ionic.css" rel="stylesheet">-->
+    <link rel="stylesheet" type="text/css" href="css\pomodoro.css">
+    
+  <script src="src\pomodoroApp.js"></script>
+  
+</head>
+<body>
+  <div ng-app="PomodoroApp" class="container">
+      
+    <div align="center" class="container-fluid " ng-controller="AppController">
+     
+        
+      <div align="center" class="row">
+          <h1>
+          <font color="aqua">
+        Welcome to Pomodoro App <a href="#" ng-model="expandme" ng-click="expandme=true"><div ng-show = !expandme><i class="fa fa-angle-double-down"></i></div></a>
+        <div ng-show="expandme">The Pomodoro Technique is a time management method developed by Francesco Cirillo in the late 1980s.
+        The technique uses a timer to break down work into intervals traditionally 25 minutes in length, separated by short breaks.
+         These intervals are known as "pomodoros", the plural in English of the Italian word pomodoro meaning "tomato".
+         The method is based on the idea that frequent breaks can improve mental agility.<a href="https://en.wikipedia.org/wiki/Pomodoro_Technique" target="_blank">[1]</a>
+         <br>
+         </font>
+         <a href ="#" ng-model ="expandme" ng-click = "expandme = false" ><i class="fa fa-angle-double-up"></i></a>
+         </h1>
+          </div>
+          <hr>
+      <div align="center"  class="row" >
+          <div id="session" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
+          <div class="row"><h3>Secession</h3></div>
+              <div class="row">
+          <button ng-click="worktime = worktime - 1;workUpdated()">-</button><b>{{worktime}}</b>
+          <button ng-click="worktime = worktime + 1;workUpdated()">+</button>
+                  </div>
+        </div>
+        <div id="break" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
+            <div class="row">
+          <h3>Break</h3>
+                </div>
+            <div class="row">
+          <button ng-click="breaktime = breaktime - 1;playUpdated()">-</button><b>{{breaktime}}</b>
+          <button ng-click="breaktime = breaktime + 1;playUpdated()">+</button>
+            </div>
+        </div>
+        <div id="break" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
+            <div class="row">
+          <h3>Long Break</h3>
+            </div>
+            <div class="row">
+          <button ng-click="longBreaktime = longBreaktime - 1;playHardUpdated()">-</button><b>{{longBreaktime}}</b>
+          <button ng-click="longBreaktime = longBreaktime + 1;playHardUpdated()">+</button>
+            </div>
+        </div>
+      </div>
+      <div align="center" id="timer" class="row">
+        <span>{{minutes}}:{{seconds}}</span>
+      </div>
+      <div align="center" id="options"class="row">
+        <button ng-click="play()">play</button>
+        <button ng-click="pause()">pause</button>
+        <button ng-click="reset()">Reset</button>
+      </div>
+          <div align="center" class="row">
+              <h3>Pomodoro # {{pomoNum}}</h3>
+          </div>
+        </div>
+      </div>
+</body>
+</html>
