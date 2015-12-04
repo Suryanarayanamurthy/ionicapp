@@ -23,11 +23,13 @@
   </head>
   <body ng-app="starter">
 
-    <ion-pane>
+    <ion-pane ng-controller="wApp">
       <ion-header-bar class="bar-stable">
-        <h1 class="title">Ionic Blank Starter</h1>
+        <h1 class="title">Weather App</h1>
       </ion-header-bar>
       <ion-content>
+          <h1>latitude: {{lat}}</h1>
+          <h1>logitude: {{long}}</h1>
       </ion-content>
     </ion-pane>
   </body>
