@@ -16,7 +16,7 @@ var app = angular.module('starter', ['ionic'])
     }
   });
 });
-app.controller('wApp',function($scope, $ionicLoading, $compile){
+app.controller('wApp',function($scope, $ionicLoading, $compile, $state, $cordovaGeolocation){
 function initialize() {
         var myLatlng = new google.maps.LatLng(43.07493,-89.381388);
         
