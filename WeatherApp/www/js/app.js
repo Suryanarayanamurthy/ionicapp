@@ -18,7 +18,26 @@ var app = angular.module('starter', ['ionic'])
 });
 app.controller('wApp',function($scope, $ionicLoading, $compile, $state){
 function initialize() {
-        var myLatlng = new google.maps.LatLng(43.07493,-89.381388);
+    setCurrentPosition();
+      }
+      google.maps.event.addDomListener(window, 'load', initialize);
+      
+      $scope.centerOnMe = function() {
+        if(!$scope.map) {
+            return;
+        }
+
+        $scope.loading = $ionicLoading.show({
+          content: 'Getting current location...',
+          showBackdrop: false
+        });
+          setCurrentPosition();
+          
+      };
+      
+    function setCurrentPosition(){
+                navigator.geolocation.getCurrentPosition(function(pos) {
+          var myLatlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
         
         var mapOptions = {
           center: myLatlng,
@@ -28,14 +47,6 @@ function initialize() {
         var map = new google.maps.Map(document.getElementById("map"),
             mapOptions);
         
-//        //Marker + infowindow + angularjs compiled ng-click
-//        var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
-//        var compiled = $compile(contentString)($scope);
-//
-//        var infowindow = new google.maps.InfoWindow({
-//          content: compiled[0]
-//        });
-//
         var marker = new google.maps.Marker({
           position: myLatlng,
           map: map,
@@ -46,31 +57,10 @@ function initialize() {
           infowindow.open(map,marker);
         });
 
-        $scope.map = map;
-      }
-      google.maps.event.addDomListener(window, 'load', initialize);
-      
-      $scope.centerOnMe = function() {
-        if(!$scope.map) {
-                
-          return;
-        }
-
-        $scope.loading = $ionicLoading.show({
-          content: 'Getting current location...',
-          showBackdrop: false
-        });
-
-        navigator.geolocation.getCurrentPosition(function(pos) {
-          $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+        $scope.map = map;           
           $scope.loading.hide();
         }, function(error) {
           alert('Unable to get location: ' + error.message);
         });
-      };
-      
-      $scope.clickTest = function() {
-        alert('Example of infowindow with ng-click')
-      };
-  
+    }
   });
