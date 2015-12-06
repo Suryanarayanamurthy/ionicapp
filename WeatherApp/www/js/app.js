@@ -34,11 +34,35 @@ function initialize() {
           setCurrentPosition();
           
       };
-      
+    function GetWeatherCordenates(place)
+    {
+        if(place === "")
+            {
+                setCurrentPosition();
+                
+            }
+        
+    }
+    function YahooWeatherAPI(lat,long)
+    {
+        // Simple GET request example:
+$http({
+  method: 'GET',
+    // get the query sting from the yahoo's yql console: query string =" select * from weather.forecast where woeid in (SELECT woeid FROM geo.placefinder WHERE text="52.4849956,13.4379836" and gflags="R") "
+  url: 'https://query.yahooapis.com/v1/public/yql?q=select%20name%2Cwoeid%20from%20geo.places%20where%20text%3D%22berl%22&format=json&diagnostics=true&callback='
+}).then(function successCallback(response) {
+    // this callback will be called asynchronously
+    // when the response is available
+  }, function errorCallback(response) {
+    // called asynchronously if an error occurs
+    // or server returns response with an error status.
+  });
+    }
+      var myLatlng;
     function setCurrentPosition(){
                 navigator.geolocation.getCurrentPosition(function(pos) {
-          var myLatlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-        
+          myLatlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        $scope.temp = myLatlng;
         var mapOptions = {
           center: myLatlng,
           zoom: 16,

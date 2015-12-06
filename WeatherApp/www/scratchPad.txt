@@ -1,0 +1,21 @@
+<a href="http://developer.yahoo.com/apps/Fq5Ll87k/">http://developer.yahoo.com/apps/Fq5Ll87k/</a></p>
+
+select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="nome, ak")
+
+select * from weather.forecast where woeid=2502265
+
+(43.07493,-89.381388)
+
+select * from geo.places where text="berl"
+
+// working sample for current location:
+SELECT * FROM geo.placefinder WHERE text="52.4849956,13.4379836" and gflags="R"
+
+// working weather model with the current coordenates
+select * from weather.forecast where woeid in (SELECT woeid FROM geo.placefinder WHERE text="52.4849956,13.4379836" and gflags="R")
+
+
+place.centroid.latitude/longitude
+
+//another sample based on text search
+select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="nome, ak")
