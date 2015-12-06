@@ -10,4 +10,12 @@ select * from geo.places where text="berl"
 
 // working sample for current location:
 SELECT * FROM geo.placefinder WHERE text="52.4849956,13.4379836" and gflags="R"
+
+// working weather model with the current coordenates
+select * from weather.forecast where woeid in (SELECT woeid FROM geo.placefinder WHERE text="52.4849956,13.4379836" and gflags="R")
+
+
 place.centroid.latitude/longitude
+
+//another sample based on text search
+select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="nome, ak")
