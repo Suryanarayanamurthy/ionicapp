@@ -34,11 +34,24 @@ function initialize() {
           setCurrentPosition();
           
       };
-      
+    function GetWeatherCordenates(place)
+    {
+        if(place === "")
+            {
+                setCurrentPosition();
+                
+            }
+        
+    }
+    function YahooWeatherAPI(lat,long)
+    {
+        
+    }
+      var myLatlng;
     function setCurrentPosition(){
                 navigator.geolocation.getCurrentPosition(function(pos) {
-          var myLatlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-        
+          myLatlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        $scope.temp = myLatlng;
         var mapOptions = {
           center: myLatlng,
           zoom: 16,
