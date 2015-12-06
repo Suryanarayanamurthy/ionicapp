@@ -49,13 +49,11 @@ function initialize() {
 $http({
   method: 'GET',
     // get the query sting from the yahoo's yql console: query string =" select * from weather.forecast where woeid in (SELECT woeid FROM geo.placefinder WHERE text="52.4849956,13.4379836" and gflags="R") "
-  url: 'https://query.yahooapis.com/v1/public/yql?q=select%20name%2Cwoeid%20from%20geo.places%20where%20text%3D%22berl%22&format=json&diagnostics=true&callback='
+  url: 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(SELECT%20woeid%20FROM%20geo.placefinder%20WHERE%20text%3D%22'+lat+'%2C'+long+'%22%20and%20gflags%3D%22R%22)&format=json&diagnostics=true&callback='
 }).then(function successCallback(response) {
-    // this callback will be called asynchronously
-    // when the response is available
+    return response;
   }, function errorCallback(response) {
-    // called asynchronously if an error occurs
-    // or server returns response with an error status.
+    return response;
   });
     }
       var myLatlng;
