@@ -1,0 +1,6 @@
+{
+    "jscodehints.detectedExclusions": [
+        "D:/Documents/GitHub/ionicapp/WeatherApp/plugins/cordova-plugin-geolocation/src/windows/GeolocationProxy.js",
+        "D:/Documents/GitHub/ionicapp/WeatherApp/gulpfile.js"
+    ]
+}

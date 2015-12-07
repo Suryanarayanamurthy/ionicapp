@@ -16,7 +16,7 @@ var app = angular.module('starter', ['ionic'])
     }
   });
 });
-app.controller('wApp',function($scope, $ionicLoading, $compile, $state){
+app.controller('wApp',function($scope, $ionicLoading, $compile, $state, $http){
 function initialize() {
     setCurrentPosition();
       }
@@ -32,35 +32,40 @@ function initialize() {
           showBackdrop: false
         });
           setCurrentPosition();
+          GetWeatherCordenates("");
           
       };
+    $scope.json_expression = 0;
     function GetWeatherCordenates(place)
     {
         if(place === "")
             {
                 setCurrentPosition();
-                
+                $scope.json_expression = YahooWeatherAPI();
+                 
             }
         
     }
-    function YahooWeatherAPI(lat,long)
+    function YahooWeatherAPI()
     {
         // Simple GET request example:
 $http({
   method: 'GET',
     // get the query sting from the yahoo's yql console: query string =" select * from weather.forecast where woeid in (SELECT woeid FROM geo.placefinder WHERE text="52.4849956,13.4379836" and gflags="R") "
-  url: 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(SELECT%20woeid%20FROM%20geo.placefinder%20WHERE%20text%3D%22'+lat+'%2C'+long+'%22%20and%20gflags%3D%22R%22)&format=json&diagnostics=true&callback='
+  url: 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(SELECT%20woeid%20FROM%20geo.placefinder%20WHERE%20text%3D%2252.4849956%2C13.4379836%22%20and%20gflags%3D%22R%22)&format=json&diagnostics=true&callback='
 }).then(function successCallback(response) {
     return response;
   }, function errorCallback(response) {
     return response;
   });
     }
-      var myLatlng;
+      var lat,long;
     function setCurrentPosition(){
                 navigator.geolocation.getCurrentPosition(function(pos) {
-          myLatlng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-        $scope.temp = myLatlng;
+                   lat= pos.coords.latitude;
+                    long=pos.coords.longitude; 
+         var myLatlng = new google.maps.LatLng(lat,long);
+        
         var mapOptions = {
           center: myLatlng,
           zoom: 16,
