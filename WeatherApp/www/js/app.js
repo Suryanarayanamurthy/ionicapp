@@ -17,6 +17,7 @@ var app = angular.module('starter', ['ionic'])
   });
 });
 app.controller('wApp',function($scope, $ionicLoading, $compile, $state, $http){
+     var url = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(SELECT%20woeid%20FROM%20geo.placefinder%20WHERE%20text%3D%2252.4849956%2C13.4379836%22%20and%20gflags%3D%22R%22)&format=json&diagnostics=true&callback=JSON_CALLBACK";
 function initialize() {
     setCurrentPosition();
       }
@@ -46,18 +47,30 @@ function initialize() {
             }
         
     }
+   
     function YahooWeatherAPI()
     {
-        // Simple GET request example:
-$http({
-  method: 'GET',
-    // get the query sting from the yahoo's yql console: query string =" select * from weather.forecast where woeid in (SELECT woeid FROM geo.placefinder WHERE text="52.4849956,13.4379836" and gflags="R") "
-  url: 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20weather.forecast%20where%20woeid%20in%20(SELECT%20woeid%20FROM%20geo.placefinder%20WHERE%20text%3D%2252.4849956%2C13.4379836%22%20and%20gflags%3D%22R%22)&format=json&diagnostics=true&callback='
-}).then(function successCallback(response) {
-    return response;
-  }, function errorCallback(response) {
-    return response;
-  });
+        $http.get(url).then(function(response) {
+  $scope.response = angular.toJson(response.data);
+            console.log(response.data);
+}).catch(function(response) {
+  $scope.response = response;
+            console.log(response);
+});
+        
+//        // Simple GET request example:
+//$http({
+//  method: 'GET',
+//    // get the query sting from the yahoo's yql console: query string =" select * from weather.forecast where woeid in (SELECT woeid FROM geo.placefinder WHERE text="52.4849956,13.4379836" and gflags="R") "
+//  url: url
+//}).then(function successCallback(response) {
+//    console.log(response);
+//    return response;
+//  }, function errorCallback(response) {
+//    console.log(response);
+//    return response;
+//  });
+        
     }
       var lat,long;
     function setCurrentPosition(){
