@@ -24,6 +24,8 @@ select * from weather.forecast where woeid in (select woeid from geo.places(1) w
 
 http://jsfiddle.net/asgoth/7bNAd/
 
+html: 
+
 <div ng-controller="Ctrl">
     <h2>Stock prices for: {{symbol}}</h2>
     <label for="symbol">Stock symbol:</label>
@@ -56,6 +58,8 @@ http://jsfiddle.net/asgoth/7bNAd/
     </table>
 </div>
 
+
+JS:
 var app = angular.module('myApp', []);
 
 app.factory('service', function($q, $http) {
