@@ -1,25 +1,5 @@
 
-var app = angular.module('PomodoroApp', ['ionic'])
-
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  });
-})
-
-function ContentController($scope, $ionicSideMenuDelegate) {
-  $scope.toggleLeft = function() {
-    $ionicSideMenuDelegate.toggleLeft();
-  };
-}
-
+var app = angular.module('PomodoroApp', ['ngRoute']);
 app.controller("AppController", function($scope, $interval, $timeout) {
   $scope.breaktime =5;
   $scope.worktime =25;
