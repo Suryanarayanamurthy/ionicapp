@@ -1,7 +1,7 @@
 {
-  "name": "ionicapp",
-  "version": "1.0.0",
-  "description": "ionicapp: An Ionic project",
+  "name": "helloworld",
+  "version": "1.1.1",
+  "description": "helloworld: An Ionic project",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",
@@ -22,7 +22,5 @@
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard"
   ],
-  "cordovaPlatforms": [
-    "android"
-  ]
+  "cordovaPlatforms": []
 }
