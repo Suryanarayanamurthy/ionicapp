@@ -1,3 +1,3 @@
 # ionicapp
-sandbox for ionic andoid apps
+Repo containing all Ionic Android apps. 
 
