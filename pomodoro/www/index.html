@@ -1,25 +1,61 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="PomodoroApp">
 <head>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-    <!-- we also need to get route of AJS for some reason -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>
-  
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<!--    <link href="lib/ionic/css/ionic.css" rel="stylesheet">-->
-    <link rel="stylesheet" type="text/css" href="css\pomodoro.css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>POMODORO</title>
+
+    <!-- CSS -->
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+<!--    <link rel="stylesheet" type="text/css" href="css\pomodoro.css">-->
+    <link href="css/style.css" rel="stylesheet">
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">-->
+    
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+    <!-- SCRIPTS -->
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+    <!-- your app's js -->
     
   <script src="src\pomodoroApp.js"></script>
+    <script src="js/app.js"></script>
+    
+<!--  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>-->
+    
+    <!-- we also need to get route of AJS for some reason -->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-route.js"></script>-->
+    
+<!--    <link href="lib/ionic/css/ionic.css" rel="stylesheet">-->
   
 </head>
-<body>
-  <div ng-app="PomodoroApp" class="container">
-      
-    <div align="center" class="container-fluid " ng-controller="AppController">
-     
+<body ng-controller="AppController">
+<ion-side-menus>
+  <!-- Left menu -->
+  <ion-side-menu side="left">
+  </ion-side-menu>
+
+
+<ion-side-menu-content
+  edge-drag-threshold="true"
+  drag-content="true">
+</ion-side-menu-content>
+
+
+
+
+</ion-side-menus>
+
+
+    <div align="center" >
+          
+
         
-      <div align="center" class="row">
+      <div>
           <h1>
           <font color="aqua">
         Welcome to Pomodoro App <a href="#" ng-model="expandme" ng-click="expandme=true"><div ng-show = !expandme><i class="fa fa-angle-double-down"></i></div></a>
@@ -33,7 +69,7 @@
          </h1>
           </div>
           <hr>
-      <div align="center"  class="row" >
+      <div class="row" >
           <div id="session" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
           <div class="row"><h3>Secession</h3></div>
               <div class="row">
@@ -68,10 +104,10 @@
         <button ng-click="pause()">pause</button>
         <button ng-click="reset()">Reset</button>
       </div>
-          <div align="center" class="row">
+      <div align="center" class="row">
               <h3>Pomodoro # {{pomoNum}}</h3>
           </div>
         </div>
-      </div>
+      
 </body>
 </html>
