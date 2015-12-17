@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-var app = angular.module('PomodoroApp', ['ionic'])
+var app = angular.module('PomodoroApp', ['ionic','PomodoroApp.controllers'])
 
 app.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -27,26 +27,36 @@ app.config(function($stateProvider, $urlRouterProvider) {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+//    controller: 'AppCtrl'
   })
 
-  .state('app.search', {
-    url: '/search',
+  .state('app.karma', {
+    url: '/karma',
     views: {
       'menuContent': {
-        templateUrl: 'templates/search.html'
+        templateUrl: 'templates/karma.html'
       }
     }
   })
 
-  .state('app.browse', {
-      url: '/browse',
+  .state('app.settings', {
+      url: '/settings',
       views: {
         'menuContent': {
-          templateUrl: 'templates/browse.html'
+          templateUrl: 'templates/settings.html'
         }
       }
     })
+  
+  .state('app.watsthis', {
+      url: '/watsthis',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/watsthis.html'
+        }
+      }
+    })
+  
     .state('app.clock', {
       url: '/clock',
       views: {
@@ -55,17 +65,17 @@ app.config(function($stateProvider, $urlRouterProvider) {
           controller: 'clockCtrl'
         }
       }
-    })
+    });
 
-  .state('app.single', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
-      }
-    }
-  });
+//  .state('app.single', {
+//    url: '/playlists/:playlistId',
+//    views: {
+//      'menuContent': {
+//        templateUrl: 'templates/playlist.html',
+//        controller: 'PlaylistCtrl'
+//      }
+//    }
+//  });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/clock');
 });
