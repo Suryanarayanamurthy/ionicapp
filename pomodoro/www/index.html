@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="PomodoroApp">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
@@ -17,7 +17,9 @@
     -->
     <!-- SCRIPTS -->
     <!-- ionic/angularjs js -->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>-->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
+    
     <!-- your app's js -->
     
 <!--  <script src="src\pomodoroApp.js"></script>-->
@@ -29,7 +31,7 @@
     <script src="cordova.js"></script>
     
 </head>
-<body ng-controller="clockCtrl">
+<body ng-app="PomodoroApp">
     <ion-nav-view></ion-nav-view>
 </body>
 </html>
