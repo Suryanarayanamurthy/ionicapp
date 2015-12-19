@@ -124,7 +124,7 @@ app.controller("clockCtrl", function($scope, $interval, $timeout) {
   secession = "work";
   }
   
-  /* updates the default time values for each secession*/
+//  /* updates the default time values for each secession*/
   
   $scope.workUpdated = function(worktime)
   {
@@ -153,3 +153,4 @@ app.controller("clockCtrl", function($scope, $interval, $timeout) {
       if($scope.longBreaktime < 0 ) $scope.longBreaktime =0;
   }
 });
+

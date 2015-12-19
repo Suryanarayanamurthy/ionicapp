@@ -1,12 +1,12 @@
 <ion-view view-title="settings">
     <ion-content>
 <!--
-<div class="row" >
+        <div align="center"  class="row" >
           <div id="session" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
           <div class="row"><h3>Secession</h3></div>
               <div class="row">
-          <button ng-click="worktime = worktime - 1;workUpdated()">-</button><b>{{worktime}}</b>
-          <button ng-click="worktime = worktime + 1;workUpdated()">+</button>
+          <button ng-click="time = worktime - 1;workUpdated(time)">-</button><b>{{worktime}}</b>
+          <button ng-click="time = worktime + 1;workUpdated(time)">+</button>
                   </div>
         </div>
         <div id="break" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
@@ -14,8 +14,8 @@
           <h3>Break</h3>
                 </div>
             <div class="row">
-          <button ng-click="breaktime = breaktime - 1;playUpdated()">-</button><b>{{breaktime}}</b>
-          <button ng-click="breaktime = breaktime + 1;playUpdated()">+</button>
+          <button ng-click="time = breaktime - 1;playUpdated(time)">-</button><b>{{breaktime}}</b>
+          <button ng-click="time = breaktime + 1;playUpdated(time)">+</button>
             </div>
         </div>
         <div id="break" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
@@ -23,11 +23,12 @@
           <h3>Long Break</h3>
             </div>
             <div class="row">
-          <button ng-click="longBreaktime = longBreaktime - 1;playHardUpdated()">-</button><b>{{longBreaktime}}</b>
-          <button ng-click="longBreaktime = longBreaktime + 1;playHardUpdated()">+</button>
+          <button ng-click="time = longBreaktime - 1;playHardUpdated(time)">-</button><b>{{longBreaktime}}</b>
+          <button ng-click="time = longBreaktime + 1;playHardUpdated(time)">+</button>
             </div>
         </div>
       </div>
 -->
+    
     </ion-content>
 </ion-view>
