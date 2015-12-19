@@ -2,7 +2,7 @@ A pomodoro timer is a tool to be used when executing the Pomodoro Technique for 
 <hr>
 
 <h1>existing features:</h1>
-
+Clean Code.
 <h2>Adjustable Settings –</h2>
 <ul>Length of a Pomodoro </ul>
 <ul>Length of a short break </ul>
