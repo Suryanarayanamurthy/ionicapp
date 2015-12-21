@@ -63,10 +63,15 @@ angular.module('PomodoroApp.controllers', [])
   //var wav = 'http://www.oringz.com/oringz-uploads/sounds-917-communication-channel.mp3';
     var alarmFile = 'resources/alarm.mp3';
     var tickingFile = 'resources/tick.mp3';
-    var whiteNoiseFile = 'resources/whitenoise.mp3';
+    //var whiteNoiseFile = 'resources/whitenoise.mp3';
+    var longbreak_deltaFile = 'resources/longbreak_delta.mp3';
+    var shortbreak_high_alphaFile = 'resources/shortbreak_high_alpha.mp3';
+    var Work_gammaFile = 'resources/Work_gamma.mp3';
     var alarmAudio = new Audio(alarmFile);
     var tickingAudio = new Audio(tickingFile);
-    var whiteNoiseAudio = new Audio(whiteNoiseFile);
+    var workAudio = new Audio(Work_gammaFile);
+    var shortBreakAudio = new Audio(shortbreak_high_alphaFile);
+    var longBreakAudio = new Audio(longbreak_deltaFile);
     
     
     
@@ -84,11 +89,13 @@ angular.module('PomodoroApp.controllers', [])
         if($scope.pomoNum >= 4)
             {
                 secession = "playHard";
-                timeLeft = $scope.longBreaktime * 60;                        
+                timeLeft = $scope.longBreaktime * 60;
+                $scope.toggleWhiteNoise();
             }
         else{
                 secession = "play";
                 timeLeft = $scope.breaktime * 60;
+                $scope.toggleWhiteNoise();
             }
         if($scope.cb_alarm) alarmAudio.play();
     }
@@ -98,6 +105,7 @@ angular.module('PomodoroApp.controllers', [])
         secession = "work";
         timeLeft = $scope.worktime * 60;
         if($scope.cb_alarm) alarmAudio.play();
+        $scope.toggleWhiteNoise();
     }
       // logic when a longbreak(asks playHard) secession is over
       else if( secession =="playHard" && timeLeft <= 0)
@@ -105,7 +113,8 @@ angular.module('PomodoroApp.controllers', [])
               secession = "work";
               timeLeft = $scope.worktime * 60;
               $scope.pomoNum =1;
-                if($scope.cb_alarm) alarmAudio.play();        
+                if($scope.cb_alarm) alarmAudio.play();
+              $scope.toggleWhiteNoise();
           }
       if($scope.cb_ticking)
     tickingAudio.play();  
@@ -137,6 +146,41 @@ angular.module('PomodoroApp.controllers', [])
   timeLeft = $scope.worktime * 60;
   secession = "work";
   }
+  
+  $scope.toggleWhiteNoise = function(){
+    if($scope.cb_wNoise){
+    switch(secession) {
+    case "work":{
+    workAudio.play();
+    workAudio.loop;
+    longBreakAudio.pause();
+    shortBreakAudio.pause();
+    break;
+    }
+    case "play":{
+    shortBreakAudio.play();
+    shortBreakAudio.loop;
+    workAudio.pause();
+    longBreakAudio.pause();
+    break;
+    }
+    case "playHard":{
+    longBreakAudio.play();
+    longBreakAudio.loop;
+    workAudio.pause();
+    shortBreakAudio.pause();
+    break;
+    }
+    }
+    }
+    // pause all background noise
+    else{
+        workAudio.pause();
+        shortBreakAudio.pause();
+        longBreakAudio.pause();
+    }
+    }
+  
   
 //  /* updates the default time values for each secession*/
   
