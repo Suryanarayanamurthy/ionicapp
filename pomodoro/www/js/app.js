@@ -63,7 +63,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
       views: {
         'menuContent': {
           templateUrl: 'templates/clock.html',
-         controller: 'clockCtrl'
+            //controller: 'clockCtrl'
         }
       }
     });

@@ -1,4 +1,4 @@
-var app = angular.module('PomodoroApp.controllers', [])
+angular.module('PomodoroApp.controllers', [])
 
 //.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 //
@@ -43,7 +43,7 @@ var app = angular.module('PomodoroApp.controllers', [])
 
 
 
-app.controller("clockCtrl", function($scope, $interval, $timeout) {
+.controller('clockCtrl', function($scope, $interval, $timeout) {
   //initial default value of all the parameters you see on the page.
   $scope.breaktime =5;
   $scope.worktime =25;
@@ -51,14 +51,25 @@ app.controller("clockCtrl", function($scope, $interval, $timeout) {
   $scope.minutes=25;
   $scope.seconds=0;
   $scope.pomoNum=1;
+  $scope.cb_alarm = true;
+  $scope.cb_ticking = true;
+  $scope.cb_wNoise = false;
   var secession = "work";
   var timeLeft = $scope.worktime * 60;
   var promise;
 
     //source for the audio track, to notifification when the counddown reaches 0.
     // TODO: make the resourse local.
-  var wav = 'http://www.oringz.com/oringz-uploads/sounds-917-communication-channel.mp3';
-  var audio = new Audio(wav);
+  //var wav = 'http://www.oringz.com/oringz-uploads/sounds-917-communication-channel.mp3';
+    var alarmFile = 'resources/alarm.mp3';
+    var tickingFile = 'resources/tick.mp3';
+    var whiteNoiseFile = 'resources/whitenoise.mp3';
+    var alarmAudio = new Audio(alarmFile);
+    var tickingAudio = new Audio(tickingFile);
+    var whiteNoiseAudio = new Audio(whiteNoiseFile);
+    
+    
+    
 
     // called using a promise todo the countdown on the screen, here all the behaviour of the app is done.
     // called this functiontion irrespective of the type of secession we are in.
@@ -79,14 +90,14 @@ app.controller("clockCtrl", function($scope, $interval, $timeout) {
                 secession = "play";
                 timeLeft = $scope.breaktime * 60;
             }
-        audio.play();
+        if($scope.cb_alarm) alarmAudio.play();
     }
       //logic when a break(aka play) secession is over
     else if(secession == "play"  && timeLeft <= 0)
     {
         secession = "work";
         timeLeft = $scope.worktime * 60;
-        audio.play();
+        if($scope.cb_alarm) alarmAudio.play();
     }
       // logic when a longbreak(asks playHard) secession is over
       else if( secession =="playHard" && timeLeft <= 0)
@@ -94,8 +105,10 @@ app.controller("clockCtrl", function($scope, $interval, $timeout) {
               secession = "work";
               timeLeft = $scope.worktime * 60;
               $scope.pomoNum =1;
-              audio.play();
+                if($scope.cb_alarm) alarmAudio.play();        
           }
+      if($scope.cb_ticking)
+    tickingAudio.play();  
 };
 
     // when play button is clicked call the showTime for every once second, 
@@ -120,6 +133,7 @@ app.controller("clockCtrl", function($scope, $interval, $timeout) {
   $scope.worktime =25;
   $scope.minutes=25;
   $scope.seconds=00;
+  $scope.longBreaktime =15;
   timeLeft = $scope.worktime * 60;
   secession = "work";
   }
