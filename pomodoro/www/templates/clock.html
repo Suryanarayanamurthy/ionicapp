@@ -14,7 +14,7 @@
     <div>
         <ion-toggle ng-model= "cb_alarm">Alarm</ion-toggle>
         <ion-toggle ng-model= "cb_ticking" >Ticking</ion-toggle>
-        <ion-toggle ng-model= "cb_wNoise" >White Noise</ion-toggle>
+        <ion-toggle ng-model= "cb_wNoise" ng-change="toggleWhiteNoise()" >White Noise</ion-toggle>
     </div>
       <div align="center"  class="row" >
           <div id="session" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
