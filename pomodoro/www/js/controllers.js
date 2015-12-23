@@ -41,7 +41,7 @@ angular.module('PomodoroApp.controllers', [])
 //  };
 //})
 
-.controller('clockCtrl', function($scope, $interval, $timeout) {
+.controller('clockCtrl', ['ListFactory','$scope', '$interval', '$timeout' ,function(ListFactory, $scope, $interval, $timeout) {
   //initial default value of all the parameters you see on the page.
   $scope.breaktime =5;
   $scope.worktime =25;
@@ -55,6 +55,9 @@ angular.module('PomodoroApp.controllers', [])
   var secession = "work";
   var timeLeft = $scope.worktime * 60;
   var promise;
+    
+     // Get list from storage
+      $scope.list = ListFactory.getList();
 
     //source for the audio track, to notifification when the counddown reaches 0.
     // TODO: make the resourse local.
@@ -208,7 +211,7 @@ angular.module('PomodoroApp.controllers', [])
       
       if($scope.longBreaktime < 0 ) $scope.longBreaktime =0;
   }
-})
+}])
 
 .controller('karmaCtrl', ['ListFactory', '$scope', '$ionicModal',
     function(ListFactory, $scope, $ionicModal) {
