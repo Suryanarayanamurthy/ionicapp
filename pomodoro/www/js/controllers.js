@@ -210,7 +210,6 @@ angular.module('PomodoroApp.controllers', [])
   }
 })
 
-
 .controller('karmaCtrl', ['ListFactory', '$scope', '$ionicModal',
     function(ListFactory, $scope, $ionicModal) {
 
@@ -251,6 +250,7 @@ angular.module('PomodoroApp.controllers', [])
       $scope.addItem = function(form) {
         var newItem = {};
         // Add values from form to object
+        newItem.name = form.name.$modelValue;
         newItem.description = form.description.$modelValue;
         newItem.useAsDefault = form.useAsDefault.$modelValue;
         // If this is the first item it will be the default item
@@ -262,6 +262,11 @@ angular.module('PomodoroApp.controllers', [])
             removeDefault();
           }
         }
+          // add pomodoros default values
+          newItem.pomoNum = 0;
+          newItem.pomoCycles =0;
+          newItem.Isdone = false;
+          
         // Save new list in scope and factory
         $scope.list.push(newItem);
         ListFactory.setList($scope.list);
@@ -300,8 +305,10 @@ angular.module('PomodoroApp.controllers', [])
 
         // Remember edit item to change it later
         $scope.tmpEditItem = item;
-
+        
+          
         // Preset form values
+        $scope.form.name.$setViewValue(item.name);  
         $scope.form.description.$setViewValue(item.description);
         $scope.form.useAsDefault.$setViewValue(item.useAsDefault);
         // Open dialog
@@ -311,6 +318,7 @@ angular.module('PomodoroApp.controllers', [])
       $scope.editItem = function(form) {
 
         var item = {};
+        item.name = form.name.$modelValue;
         item.description = form.description.$modelValue;
         item.useAsDefault = form.useAsDefault.$modelValue;
 
