@@ -1,5 +1,23 @@
 <ion-view view-title="clock"  >
 <ion-content ng-controller="clockCtrl">
+    
+     <label class="item item-input item-select">
+    <div class="input-label">
+      Focus on :
+    </div>
+    <select ng-model="selectedItem" ng-change="changeSelectedItem(selectedItem)">
+        <option ng-repeat="item in list" item="item" item-type="item item-icon-left" class = "item-text-wrap">
+            {{item.name}}
+              </option>
+<!--
+      <option>Blue</option>
+      <option selected>Green</option>
+      <option>Red</option>
+-->
+      
+    </select>
+  </label>
+    
     <div align="center" id="timer" class="row">
         <span>{{minutes}}:{{seconds}}</span>
       </div>
