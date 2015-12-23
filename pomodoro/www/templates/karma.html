@@ -1,31 +1,42 @@
-<ion-view view-title="karma">
-    <ion-content ng-controller = "karmaCtrl">
-        <ion-list 
-          show-delete="shouldShowDelete"
-          show-reorder="shouldShowReorder"
-          can-swipe="listCanSwipe">
-  <ion-item ng-repeat="item in items"
-            class="item-thumbnail-left">
+<!--
+  This template loads for the 'ListExample' state (app.js)
+-->
+<ion-view  view-title="Karma"  
+          >
+<!--
+	<ion-header-bar
+  		title="Advanced list example" 
+  		left-buttons="leftButtons" 
+  		right-buttons="rightButtons" 
+  		type="bar-dark" 
+  		align-title="center">
+	</ion-header-bar>
+-->
 
-    <img ng-src="{{item.img}}">
-    <h2>{{item.title}}</h2>
-    <p>{{item.description}}</p>
-    <ion-option-button class="button-positive"
-                       ng-click="share(item)">
-      Share
-    </ion-option-button>
-    <ion-option-button class="button-info"
-                       ng-click="edit(item)">
-      Edit
-    </ion-option-button>
-    <ion-delete-button class="ion-minus-circled"
-                       ng-click="items.splice($index, 1)">
-    </ion-delete-button>
-    <ion-reorder-button class="ion-navicon"
-                        on-reorder="reorderItem(item, $fromIndex, $toIndex)">
-    </ion-reorder-button>
-
-  </ion-item>
-</ion-list>
-    </ion-content>
+	<ion-content has-header="true" ng-controller="karmaCtrl">
+<!--
+        <ion-header-bar
+  		title="Advanced list example" 
+  		left-buttons="leftButtons" 
+  		right-buttons="rightButtons" 
+  		type="bar-dark" 
+  		align-title="center">
+	</ion-header-bar>
+-->
+        <button class ="leftButtons" ng-click="showAddChangeDialog('add')">left button</button>
+        
+		<ion-list option-buttons="itemButtons" can-swipe="true">
+			<label class="item item-divider">
+    			List
+  			</label>
+  			<ion-item ng-if="list.length == 0">
+				Press <i class="icon ion-plus"></i> to add item
+			</ion-item>
+			<!--  -->
+			<ion-item ng-repeat="item in list" item="item" item-type="item item-icon-left" ng-click="makeDefault(item)" ng-tap="makeDefault(item)">
+	  					<i ng-if="item.useAsDefault" class="icon ion-checkmark"></i>
+	  					{{ item.description }}
+			</ion-item>
+		</ion-list>
+	</ion-content>
 </ion-view>
