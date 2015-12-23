@@ -396,19 +396,19 @@ angular.module('PomodoroApp.controllers', [])
       $scope.leftButtons.push(addButton);
 
       // Define item buttons
-      $scope.itemButtons = [{
-        text: 'Delete',
-        type: 'button-assertive',
-        onTap: function(item) {
-          $scope.removeItem(item);
-        }
-      }, {
-        text: 'Edit',
-        type: 'button-calm',
-        onTap: function(item) {
-          $scope.showEditItem(item);
-        }
-      }];
+//      $scope.itemButtons = [{
+//        text: 'Delete',
+//        type: 'button-assertive',
+//        onTap: function(item) {
+//          $scope.removeItem(item);
+//        }
+//      }, {
+//        text: 'Edit',
+//        type: 'button-calm',
+//        onTap: function(item) {
+//          $scope.showEditItem(item);
+//        }
+//      }];
 
       // Get list from storage
       $scope.list = ListFactory.getList();

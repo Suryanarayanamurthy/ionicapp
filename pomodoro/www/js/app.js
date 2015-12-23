@@ -20,7 +20,7 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
     views: {
       'menuContent': {
         templateUrl: 'templates/karma.html',
-          //controller: 'karmaCtrl'
+          controller: 'karmaCtrl'
       }
     }
   })
