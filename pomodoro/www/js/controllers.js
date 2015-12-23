@@ -263,7 +263,9 @@ angular.module('PomodoroApp.controllers', [])
           }
         }
           // add pomodoros default values
-
+          newItem.pomoNum = 0;
+          newItem.pomoCycles =0;
+          newItem.Isdone = false;
           
         // Save new list in scope and factory
         $scope.list.push(newItem);
