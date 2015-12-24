@@ -42,23 +42,11 @@ angular.module('PomodoroApp.controllers', [])
 //})
 
 .controller('clockCtrl', ['ListFactory','$scope', '$interval', '$timeout' ,function(ListFactory, $scope, $interval, $timeout) {
-  //initial default value of all the parameters you see on the page.
-  $scope.breaktime =5;
-  $scope.worktime =25;
-  $scope.longBreaktime =15;
-  $scope.minutes=25;
-  $scope.seconds=0;
-  $scope.pomoNum=1;
-  $scope.cb_alarm = true;
-  $scope.cb_ticking = true;
-  $scope.cb_wNoise = false;
-  var secession = "work";
+    var secession = "work";
   var timeLeft = $scope.worktime * 60;
   var promise;
     
-     // Get list from storage
-      $scope.list = ListFactory.getList();
-
+  
     //source for the audio track, to notifification when the counddown reaches 0.
     // TODO: make the resourse local.
   //var wav = 'http://www.oringz.com/oringz-uploads/sounds-917-communication-channel.mp3';
@@ -73,10 +61,58 @@ angular.module('PomodoroApp.controllers', [])
     var workAudio = new Audio(Work_gammaFile);
     var shortBreakAudio = new Audio(shortbreak_high_alphaFile);
     var longBreakAudio = new Audio(longbreak_deltaFile);
+  
+// using init() as the constructor
+  
+$scope.init = function (){
+  //initial default value of all the parameters you see on the page.
+  $scope.breaktime =5;
+  $scope.worktime =25;
+  $scope.longBreaktime =15;
+  $scope.minutes=25;
+  $scope.seconds=0;
+  $scope.pomoNum=1;
+  $scope.cb_alarm = true;
+  $scope.cb_ticking = true;
+  $scope.cb_wNoise = false;
     
+    // Get list from storage
+  $scope.list = ListFactory.getList();
     
-    
-
+//    // setting the default item as selected.
+//    for (var i = 0; i < $scope.list.length; i++) {
+//          if ($scope.list[i].useAsDefault == true) {
+//            $scope.selectedItem = $scope.list[i];
+//          }
+//        }
+    if( $scope.list.length == 0 )
+    {
+        $scope.selectedItem = createDefaultTaskItem();
+        
+        
+    }
+    else
+    {
+        $scope.selectedItem = $scope.list[0];
+    }
+};
+    function createDefaultTaskItem()
+    {
+        var newItem = {};
+        // Add default valuse
+        newItem.name = "Other";
+        newItem.description = "other misc tasks";
+        
+        // add pomodoros default values
+          newItem.pomoNum = 0;
+          newItem.pomoCycles =0;
+          newItem.Isdone = false;
+          
+        // Save new list in scope and factory
+        $scope.list.push(newItem);
+        ListFactory.setList($scope.list);
+        return newItem;
+    }
     // called using a promise todo the countdown on the screen, here all the behaviour of the app is done.
     // called this functiontion irrespective of the type of secession we are in.
   function ShowTime(){
@@ -211,18 +247,53 @@ angular.module('PomodoroApp.controllers', [])
       
       if($scope.longBreaktime < 0 ) $scope.longBreaktime =0;
   }
+  
+  //
+  $scope.changeSelectedItem = function(selectedItem){
+//      editItem(selectedItem);
+  //
+      
+      
+  }
+  
+//    function editItem(selectedItem) {
+//        var item = {};
+//        item.name = selectedItem.$modelValue;
+//        item.description = selectedItem.$modelValue;
+//        item.useAsDefault = true;
+//
+//        var editIndex = ListFactory.getList().indexOf(selectedItem);
+//        $scope.list[editIndex] = item;
+//        
+//        ListFactory.setList(list);
+//        
+//          makeDefault(item);
+//      }
+//    
+//    function makeDefault(item){
+//        //Remove existing default
+//        for (var i = 0; i < $scope.list.length; i++) {
+//          if ($scope.list[i].useAsDefault == true) {
+//            $scope.list[i].useAsDefault = false;
+//          }
+//        }
+//        
+//        var newDefaultIndex = list.indexOf(item);
+//        list[newDefaultIndex].useAsDefault = true;
+//        ListFactory.setList(list);
+//    }
+    
+  
 }])
 
 .controller('karmaCtrl', ['ListFactory', '$scope', '$ionicModal',
     function(ListFactory, $scope, $ionicModal) {
-
         $ionicModal.fromTemplateUrl('templates/add-change-dialog.html', {
         scope: $scope,
         animation: 'slide-in-up'
       }).then( function(modal) {
         $scope.addDialog = modal;
       });
-
 
       $scope.showAddChangeDialog = function(action) {
         $scope.action = action;
@@ -305,11 +376,9 @@ angular.module('PomodoroApp.controllers', [])
       }
 
       $scope.showEditItem = function(item) {
-
         // Remember edit item to change it later
         $scope.tmpEditItem = item;
-        
-          
+                  
         // Preset form values
         $scope.form.name.$setViewValue(item.name);  
         $scope.form.description.$setViewValue(item.description);
@@ -319,7 +388,6 @@ angular.module('PomodoroApp.controllers', [])
       };
 
       $scope.editItem = function(form) {
-
         var item = {};
         item.name = form.name.$modelValue;
         item.description = form.description.$modelValue;
@@ -336,8 +404,7 @@ angular.module('PomodoroApp.controllers', [])
         if (item.useAsDefault) {
           $scope.makeDefault(item);
         }
-
         $scope.leaveAddChangeDialog();
-      }
+      };
     }
   ]);
