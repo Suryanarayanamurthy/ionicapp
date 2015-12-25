@@ -5,7 +5,8 @@
     <div class="input-label">
       Focus on :
     </div>
-         
+         <ion-checkbox ng-model="isDone" ng-change= "doneChanged()">Done</ion-checkbox>
+
           <select name='options' ng-model="selectedItem"
                   ng-options="item as item.name for item in list">
           </select>
@@ -32,7 +33,9 @@
         
       </div>
         <div align="center" class="row">
-              <h3>Pomodoro # {{pomoNum}}</h3>
+              <h3 ng-show="secession == 'work'">Pomodoro # {{pomoNum}}</h3>
+            <h3 ng-show="secession == 'play'">Short Break</h3>
+            <h3 ng-show="secession == 'playHard'">Long Break!!</h3>
           </div>
     <div>
         <ion-toggle ng-model= "cb_alarm">Alarm</ion-toggle>
