@@ -42,14 +42,14 @@ angular.module('PomodoroApp.controllers', [])
 //})
 
 .controller('clockCtrl', ['ListFactory','$scope', '$interval', '$timeout' ,function(ListFactory, $scope, $interval, $timeout) {
-    var secession = "work";
+  
   var timeLeft = $scope.worktime * 60;
   var promise;
     
   
     //source for the audio track, to notifification when the counddown reaches 0.
     // TODO: make the resourse local.
-  //var wav = 'http://www.oringz.com/oringz-uploads/sounds-917-communication-channel.mp3';
+    //var wav = 'http://www.oringz.com/oringz-uploads/sounds-917-communication-channel.mp3';
     var alarmFile = 'resources/alarm.mp3';
     var tickingFile = 'resources/tick.mp3';
     //var whiteNoiseFile = 'resources/whitenoise.mp3';
@@ -61,7 +61,8 @@ angular.module('PomodoroApp.controllers', [])
     var workAudio = new Audio(Work_gammaFile);
     var shortBreakAudio = new Audio(shortbreak_high_alphaFile);
     var longBreakAudio = new Audio(longbreak_deltaFile);
-  
+    
+    var pomoNumber = 0;
 // using init() as the constructor
   
 $scope.init = function (){
@@ -75,6 +76,7 @@ $scope.init = function (){
   $scope.cb_alarm = true;
   $scope.cb_ticking = true;
   $scope.cb_wNoise = false;
+  $scope.secession = "work";
     
     // Get list from storage
   $scope.list = ListFactory.getList();
@@ -88,8 +90,6 @@ $scope.init = function (){
     if( $scope.list.length == 0 )
     {
         $scope.selectedItem = createDefaultTaskItem();
-        
-        
     }
     else
     {
@@ -104,9 +104,9 @@ $scope.init = function (){
         newItem.description = "other misc tasks";
         
         // add pomodoros default values
-          newItem.pomoNum = 0;
-          newItem.pomoCycles =0;
-          newItem.Isdone = false;
+        newItem.pomoNum = 0;
+        newItem.pomoCycles =0;
+        newItem.Isdone = false;
           
         // Save new list in scope and factory
         $scope.list.push(newItem);
@@ -115,44 +115,54 @@ $scope.init = function (){
     }
     // called using a promise todo the countdown on the screen, here all the behaviour of the app is done.
     // called this functiontion irrespective of the type of secession we are in.
-  function ShowTime(){
+    function ShowTime(){
     $scope.minutes = Math.floor(timeLeft / 60);
     $scope.seconds = timeLeft - ($scope.minutes * 60);
     timeLeft -= 1;
       //logic when a work secession is over.
-    if(secession == "work" && timeLeft <= 0)
+    if($scope.secession == "work" && timeLeft <= 0)
     {
         $scope.pomoNum++;
-        if($scope.pomoNum >= 4)
+        
+        // increment the pomo number for the selected task
+        $scope.selectedItem.pomoNum++;
+        
+        // increment the pomo cycles for the selected task
+        if(($scope.selectedItem.pomoNum % 4) == 0) $scope.selectedItem.pomoCycles++;
+        
+        //if($scope.pomoNum >= 4)
+        if($scope.pomoNum > 4)
             {
-                secession = "playHard";
+                $scope.secession = "playHard";
                 timeLeft = $scope.longBreaktime * 60;
+                // change the white noise to break time
                 $scope.toggleWhiteNoise();
             }
         else{
-                secession = "play";
+                $scope.secession = "play";
                 timeLeft = $scope.breaktime * 60;
+                // change the white noise for long break
                 $scope.toggleWhiteNoise();
             }
         if($scope.cb_alarm) alarmAudio.play();
     }
       //logic when a break(aka play) secession is over
-    else if(secession == "play"  && timeLeft <= 0)
+    else if($scope.secession == "play"  && timeLeft <= 0)
     {
-        secession = "work";
+        $scope.secession = "work";
         timeLeft = $scope.worktime * 60;
         if($scope.cb_alarm) alarmAudio.play();
         $scope.toggleWhiteNoise();
     }
       // logic when a longbreak(asks playHard) secession is over
-      else if( secession =="playHard" && timeLeft <= 0)
-          {
-              secession = "work";
-              timeLeft = $scope.worktime * 60;
-              $scope.pomoNum =1;
-                if($scope.cb_alarm) alarmAudio.play();
-              $scope.toggleWhiteNoise();
-          }
+      else if( $scope.secession =="playHard" && timeLeft <= 0)
+    {
+          $scope.secession = "work";
+          timeLeft = $scope.worktime * 60;
+          $scope.pomoNum =1;
+          if($scope.cb_alarm) alarmAudio.play();
+          $scope.toggleWhiteNoise();
+    }
       if($scope.cb_ticking)
     tickingAudio.play();  
 };
@@ -181,12 +191,12 @@ $scope.init = function (){
   $scope.seconds=00;
   $scope.longBreaktime =15;
   timeLeft = $scope.worktime * 60;
-  secession = "work";
+  $scope.secession = "work";
   }
   
   $scope.toggleWhiteNoise = function(){
     if($scope.cb_wNoise){
-    switch(secession) {
+    switch($scope.secession) {
     case "work":{
     workAudio.play();
     workAudio.loop;
@@ -224,7 +234,7 @@ $scope.init = function (){
   $scope.workUpdated = function(worktime)
   {
       $scope.worktime = worktime;
-  if(secession == "work")
+  if($scope.secession == "work")
       
   timeLeft = $scope.worktime*60;
 
@@ -233,16 +243,15 @@ $scope.init = function (){
   $scope.playUpdated = function(breaktime)
   {
       $scope.breaktime = breaktime;
-    if(secession == "play")
+    if($scope.secession == "play")
     timeLeft = $scope.breaktime *60;
 
     if($scope.breaktime < 0 ) $scope.breaktime =0;
-      console.log($scope.breaktime);
   }
   $scope.playHardUpdated = function(longBreaktime)
   {
       $scope.longBreaktime = longBreaktime;
-      if(secession == "playHard")
+      if($scope.secession == "playHard")
           timeLeft =$scope.longBreaktime *60;
       
       if($scope.longBreaktime < 0 ) $scope.longBreaktime =0;
@@ -251,9 +260,11 @@ $scope.init = function (){
   //
   $scope.changeSelectedItem = function(selectedItem){
 //      editItem(selectedItem);
-  //
-      
-      
+//
+  }
+  
+  $scope.doneChanged = function(){
+      $scope.selectedItem.Isdone = $scope.isDone;
   }
   
 //    function editItem(selectedItem) {
