@@ -123,13 +123,9 @@ $scope.init = function (){
     if($scope.secession == "work" && timeLeft <= 0)
     {
         $scope.pomoNum++;
-        
         // increment the pomo number for the selected task
         $scope.selectedItem.pomoNum++;
-        
-        // increment the pomo cycles for the selected task
-        if(($scope.selectedItem.pomoNum % 4) == 0) $scope.selectedItem.pomoCycles++;
-        
+        console.log("pomodoro number: "+$scope.selectedItem.pomoNum)
         //if($scope.pomoNum >= 4)
         if($scope.pomoNum > 4)
             {
@@ -137,6 +133,9 @@ $scope.init = function (){
                 timeLeft = $scope.longBreaktime * 60;
                 // change the white noise to break time
                 $scope.toggleWhiteNoise();
+                // increment the pomo cycles for the selected task
+                $scope.selectedItem.pomoCycles++;
+                console.log("pomodoro cycle: " + $scope.selectedItem.pomoCycles);
             }
         else{
                 $scope.secession = "play";
