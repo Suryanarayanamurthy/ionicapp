@@ -7,6 +7,11 @@ A pomodoro timer is a tool to be used when executing the Pomodoro Technique for 
 <ul>Length of a Pomodoro </ul>
 <ul>Length of a short break </ul>
 <ul>Length of a long break </ul>
+<h2> Sound setting</h2>
+<ul> Seconds ticking</ul>
+<ul> Alarm after secessions</ul>
+<ul> White noise </ul>
+
 
 – Run Number The run number deﬁnes the number of pomodoros after that a long break is started automatically.<br>
 
