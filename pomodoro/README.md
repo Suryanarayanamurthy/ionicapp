@@ -11,16 +11,22 @@ A pomodoro timer is a tool to be used when executing the Pomodoro Technique for 
 <ul> Seconds ticking</ul>
 <ul> Alarm after secessions</ul>
 <ul> White noise </ul>
+<h2> task List</h2>
+<ul> name and description for each task.</ul>
+<ul> save the list locally</ul>
+<ul>count the number of pomodoros and pomodoro cycles done for each task. </ul>
 
 
-– Run Number The run number deﬁnes the number of pomodoros after that a long break is started automatically.<br>
+<h2>Run Number</h2>
+<ul>The run number deﬁnes the number of pomodoros after that a long break is started automatically.</ul><br>
 
-• Start/Stop pomodoro countdown timer<br>
-• Start break countdown timer automatically after pomodoro ﬁnished<br>
+<h2> controls</h2>
+ <ul>Start/Stop pomodoro countdown timer</ul>
+ <ul>Start break countdown timer automatically after pomodoro ﬁnished</ul>
 
 <h1>upcoming features</h1>
 
-<ul>Naming of Tasks for one or more Pomodoros </ul>
+
 <ul>Connect to Parse-Backend to persist data </ul>
 <ul> unit test cases</ul>
 
