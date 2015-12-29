@@ -1,45 +1,45 @@
 angular.module('PomodoroApp.controllers', [])
 
-//.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-//
-//  // With the new view caching in Ionic, Controllers are only called
-//  // when they are recreated or on app start, instead of every page change.
-//  // To listen for when this page is active (for example, to refresh data),
-//  // listen for the $ionicView.enter event:
-//  //$scope.$on('$ionicView.enter', function(e) {
-//  //});
-//
-//  // Form data for the login modal
-//  $scope.loginData = {};
-//
-//  // Create the login modal that we will use later
-//  $ionicModal.fromTemplateUrl('templates/login.html', {
-//    scope: $scope
-//  }).then(function(modal) {
-//    $scope.modal = modal;
-//  });
-//
-//  // Triggered in the login modal to close it
-//  $scope.closeLogin = function() {
-//    $scope.modal.hide();
-//  };
-//
-//  // Open the login modal
-//  $scope.login = function() {
-//    $scope.modal.show();
-//  };
-//
-//  // Perform the login action when the user submits the login form
-//  $scope.doLogin = function() {
-//    console.log('Doing login', $scope.loginData);
-//
-//    // Simulate a login delay. Remove this and replace with your login
-//    // code if using a login system
-//    $timeout(function() {
-//      $scope.closeLogin();
-//    }, 1000);
-//  };
-//})
+.controller('AppCtrl', [ '$scope', '$ionicModal', '$timeout', function($scope, $ionicModal, $timeout) {
+
+  // With the new view caching in Ionic, Controllers are only called
+  // when they are recreated or on app start, instead of every page change.
+  // To listen for when this page is active (for example, to refresh data),
+  // listen for the $ionicView.enter event:
+  //$scope.$on('$ionicView.enter', function(e) {
+  //});
+
+  // Form data for the login modal
+  $scope.loginData = {};
+
+  // Create the login modal that we will use later
+  $ionicModal.fromTemplateUrl('templates/login.html', {
+    scope: $scope
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+
+  // Triggered in the login modal to close it
+  $scope.closeLogin = function() {
+    $scope.modal.hide();
+  };
+
+  // Open the login modal
+  $scope.login = function() {
+    $scope.modal.show();
+  };
+
+  // Perform the login action when the user submits the login form
+  $scope.doLogin = function() {
+    console.log('Doing login', $scope.loginData);
+
+    // Simulate a login delay. Remove this and replace with your login
+    // code if using a login system
+    $timeout(function() {
+      $scope.closeLogin();
+    }, 1000);
+  };
+}])
 
 .controller('clockCtrl', ['ListFactory','$scope', '$interval', '$timeout' ,function(ListFactory, $scope, $interval, $timeout) {
   
@@ -65,7 +65,7 @@ angular.module('PomodoroApp.controllers', [])
     var pomoNumber = 0;
 // using init() as the constructor
   
-$scope.init = function (){
+    $scope.init = function (){
   //initial default value of all the parameters you see on the page.
   $scope.breaktime =5;
   $scope.worktime =25;
@@ -81,21 +81,27 @@ $scope.init = function (){
     // Get list from storage
   $scope.list = ListFactory.getList();
     
-//    // setting the default item as selected.
-//    for (var i = 0; i < $scope.list.length; i++) {
-//          if ($scope.list[i].useAsDefault == true) {
-//            $scope.selectedItem = $scope.list[i];
-//          }
-//        }
-    if( $scope.list.length == 0 )
+};
+    
+     //To listen for when this page is active (for example, to refresh data),
+  // listen for the $ionicView.enter event:
+  $scope.$on('$ionicView.enter', function(e) {
+        // Get list from storage
+  $scope.list = ListFactory.getList();
+  
+          if( $scope.list.length == 0 )
     {
+        
         $scope.selectedItem = createDefaultTaskItem();
+        
     }
     else
     {
         $scope.selectedItem = $scope.list[0];
     }
-};
+  });
+
+    
     function createDefaultTaskItem()
     {
         var newItem = {};
@@ -125,7 +131,8 @@ $scope.init = function (){
         $scope.pomoNum++;
         // increment the pomo number for the selected task
         $scope.selectedItem.pomoNum++;
-        console.log("pomodoro number: "+$scope.selectedItem.pomoNum)
+        // save it to the list
+        saveTaskList($scope.selectedItem);
         //if($scope.pomoNum >= 4)
         if($scope.pomoNum > 4)
             {
@@ -135,6 +142,8 @@ $scope.init = function (){
                 $scope.toggleWhiteNoise();
                 // increment the pomo cycles for the selected task
                 $scope.selectedItem.pomoCycles++;
+                //save the selected task with the updated info.
+                saveTaskList($scope.selectedItem);
                 console.log("pomodoro cycle: " + $scope.selectedItem.pomoCycles);
             }
         else{
@@ -256,15 +265,25 @@ $scope.init = function (){
       if($scope.longBreaktime < 0 ) $scope.longBreaktime =0;
   }
   
-  //
+  //update the selected item
   $scope.changeSelectedItem = function(selectedItem){
-//      editItem(selectedItem);
-//
+      //editItem(selectedItem);
+      //
   }
   
   $scope.doneChanged = function(){
       $scope.selectedItem.Isdone = $scope.isDone;
   }
+  
+  function saveTaskList(item)
+    {
+        if(item !== undefined)
+        {
+            var editIndex = ListFactory.getList().indexOf(item);
+            $scope.list[editIndex] = item;
+        }
+        ListFactory.setList($scope.list);
+    }
   
 //    function editItem(selectedItem) {
 //        var item = {};
