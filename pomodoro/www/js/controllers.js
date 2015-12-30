@@ -43,7 +43,7 @@ angular.module('PomodoroApp.controllers', [])
 
 .controller('clockCtrl', ['ListFactory','$scope', '$interval', '$timeout' ,function(ListFactory, $scope, $interval, $timeout) {
   
-  var timeLeft = $scope.worktime * 60;
+  
   var promise;
     
   
@@ -61,30 +61,32 @@ angular.module('PomodoroApp.controllers', [])
     var workAudio = new Audio(Work_gammaFile);
     var shortBreakAudio = new Audio(shortbreak_high_alphaFile);
     var longBreakAudio = new Audio(longbreak_deltaFile);
-    
+    var timeLeft;
     var pomoNumber = 0;
+    var playTimer = false;
 // using init() as the constructor
   
     $scope.init = function (){
   //initial default value of all the parameters you see on the page.
-  $scope.breaktime =5;
-  $scope.worktime =25;
-  $scope.longBreaktime =15;
-  $scope.minutes=25;
-  $scope.seconds=0;
-  $scope.pomoNum=1;
-  $scope.cb_alarm = true;
-  $scope.cb_ticking = true;
-  $scope.cb_wNoise = false;
-  $scope.secession = "work";
-    
+    $scope.breaktime =5;
+    $scope.worktime =25;
+    $scope.longBreaktime =15;
+    $scope.minutes=25;
+    $scope.seconds=0;
+    $scope.pomoNum=1;
+    $scope.cb_alarm = true;
+    $scope.cb_ticking = true;
+    $scope.cb_wNoise = false;
+    $scope.secession = "work";
+
     // Get list from storage
-  $scope.list = ListFactory.getList();
-    
+    $scope.list = ListFactory.getList();
+    timeLeft  = $scope.worktime * 60;
 };
     
-     //To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
+    
+    //To listen for when this page is active (for example, to refresh data),
+    // listen for the $ionicView.enter event:
   $scope.$on('$ionicView.enter', function(e) {
         // Get list from storage
   $scope.list = ListFactory.getList();
@@ -118,7 +120,7 @@ angular.module('PomodoroApp.controllers', [])
         $scope.list.push(newItem);
         ListFactory.setList($scope.list);
         return newItem;
-    }
+    };
     // called using a promise todo the countdown on the screen, here all the behaviour of the app is done.
     // called this functiontion irrespective of the type of secession we are in.
     function ShowTime(){
@@ -172,9 +174,32 @@ angular.module('PomodoroApp.controllers', [])
           $scope.toggleWhiteNoise();
     }
       if($scope.cb_ticking)
-    tickingAudio.play();  
+    tickingAudio.play();
+        fillHeightNdColor();
 };
 
+    function fillHeightNdColor()
+    {
+    var denom;
+    switch($scope.secession)
+        {
+    case "work":{
+        denom = 60 * $scope.worktime;
+    break;
+    }
+    case "play":{
+        denom = 60 * $scope.breaktime;
+    break;
+    }
+    case "playHard":{
+        denom = 60 * $scope.longBreaktime;
+    break;
+    }
+        }
+    var perc = Math.abs((timeLeft / denom) * 100 - 100);
+    $scope.fillHeight = perc + '%';
+    };
+    
     // when play button is clicked call the showTime for every once second, 
     // irrespective of the secession we are in right now,
     //because the logic for handiling behaviour during each secession is on showtime function.
@@ -187,6 +212,21 @@ angular.module('PomodoroApp.controllers', [])
   {
      $interval.cancel(promise);
   };
+    
+    // using toggle player on the clock section insted of having 2 buttons for play and pause
+    // using previously implimented functions.
+    $scope.toggleTimer = function(){
+        if(!playTimer)
+        {
+            $scope.play();
+            playTimer = true;
+        }
+        else{
+            $scope.pause();
+            playTimer = false;
+        }
+    };
+    
     // reset all the variables to default;
     // work = 25mins, break = 5 mins, long break = 15 mins and secession = work.
     // and cancel the existing promise.
@@ -200,9 +240,10 @@ angular.module('PomodoroApp.controllers', [])
   $scope.longBreaktime =15;
   timeLeft = $scope.worktime * 60;
   $scope.secession = "work";
-  }
+  };
   
-  $scope.toggleWhiteNoise = function(){
+  $scope.toggleWhiteNoise = function(cb_wNoise){
+      $scope.cb_wNoise = cb_wNoise;
     if($scope.cb_wNoise){
     switch($scope.secession) {
     case "work":{
@@ -234,7 +275,15 @@ angular.module('PomodoroApp.controllers', [])
         shortBreakAudio.pause();
         longBreakAudio.pause();
     }
-    }
+    };
+  
+  $scope.toggleAlarm = function (cb_alarm){
+      $scope.cb_alarm = cb_alarm;
+  };
+    
+    $scope.toggleticking = function (cb_ticking){
+        $scope.cb_ticking = cb_ticking;
+    };
   
   
 //  /* updates the default time values for each secession*/
@@ -247,7 +296,7 @@ angular.module('PomodoroApp.controllers', [])
   timeLeft = $scope.worktime*60;
 
   if($scope.worktime < 0) $scope.worktime = 0;
-  }
+  };
   $scope.playUpdated = function(breaktime)
   {
       $scope.breaktime = breaktime;
@@ -255,7 +304,7 @@ angular.module('PomodoroApp.controllers', [])
     timeLeft = $scope.breaktime *60;
 
     if($scope.breaktime < 0 ) $scope.breaktime =0;
-  }
+  };
   $scope.playHardUpdated = function(longBreaktime)
   {
       $scope.longBreaktime = longBreaktime;
@@ -263,17 +312,17 @@ angular.module('PomodoroApp.controllers', [])
           timeLeft =$scope.longBreaktime *60;
       
       if($scope.longBreaktime < 0 ) $scope.longBreaktime =0;
-  }
+  };
   
   //update the selected item
   $scope.changeSelectedItem = function(selectedItem){
       //editItem(selectedItem);
       //
-  }
+  };
   
   $scope.doneChanged = function(){
       $scope.selectedItem.Isdone = $scope.isDone;
-  }
+  };
   
   function saveTaskList(item)
     {
@@ -283,7 +332,7 @@ angular.module('PomodoroApp.controllers', [])
             $scope.list[editIndex] = item;
         }
         ListFactory.setList($scope.list);
-    }
+    };
   
 //    function editItem(selectedItem) {
 //        var item = {};

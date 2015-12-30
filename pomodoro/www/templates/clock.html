@@ -33,10 +33,23 @@
     </div>
     
     
-    <div align="center" id="timer" class="row">
+    <section ng-click="toggleTimer()" class="padding">
+    <div class="timer">
+            <p class="title" ng-show="secession == 'work'">Pomodoro # {{pomoNum}}</p>
+            <p class="title" ng-show="secession == 'play'">Short Break</p>
+            <p class="title" ng-show="secession == 'playHard'">Long Break!!</p>
+      <p>{{minutes}}:{{seconds}}</p><span ng-style="{'height':fillHeight, 'background':fillColor }" class="fill"></span>
+    </div>
+  </section>
+    
+    
+<!--
+    <div  class="row timer">
         <span>{{minutes}}:{{seconds}}</span>
       </div>
+-->
     
+<!--
     
       <div align="center" id="options"class="row">
         <button ng-click="play()">play</button>
@@ -48,10 +61,46 @@
             <h3 ng-show="secession == 'play'">Short Break</h3>
             <h3 ng-show="secession == 'playHard'">Long Break!!</h3>
           </div>
+-->
     <div>
+
+<!--
         <ion-toggle ng-model= "cb_alarm">Alarm</ion-toggle>
         <ion-toggle ng-model= "cb_ticking" >Ticking</ion-toggle>
         <ion-toggle ng-model= "cb_wNoise" ng-change="toggleWhiteNoise()" >White Noise</ion-toggle>
+        
+-->
+<ul class="list">
+
+    <li class="item item-toggle">
+     Alarm
+     <label class="toggle toggle-assertive">
+       <input type="checkbox" ng-model= "cb_alarm" ng-change="toggleAlarm(cb_alarm)">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+    <li class="item item-toggle">
+     Ticking
+     <label class="toggle toggle-assertive">
+       <input type="checkbox" ng-model= "cb_ticking" ng-change="toggleticking(cb_ticking)">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+    <li class="item item-toggle">
+     White Noise
+     <label class="toggle toggle-assertive">
+       <input type="checkbox" ng-model= "cb_wNoise" ng-change="toggleWhiteNoise(cb_wNoise)">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+</ul>
+        
     </div>
       <div align="center"  class="row" >
           <div id="session" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
