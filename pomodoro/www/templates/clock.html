@@ -1,32 +1,43 @@
 <ion-view view-title="clock"  >
 <ion-content  ng-init="init()">
     
-     <label class="item item-input item-select">
+<!--
+<div class="row">
+    <div class="col  input-label">
+      Focus on :
+    </div>
+    <div class ="col col-50">
+          <select  name='options' ng-model="selectedItem"
+                  ng-options="item as item.name for item in list">
+          </select>
+        </div>
+    
+    <div class="col">
+         <ion-checkbox ng-model="isDone" ng-change= "doneChanged()">Done</ion-checkbox>
+</div>
+    
+</div>     
+-->
+    <div class="row">
+        <div class="col">
+    <label class="item item-input item-select">
     <div class="input-label">
       Focus on :
     </div>
-         <ion-checkbox ng-model="isDone" ng-change= "doneChanged()">Done</ion-checkbox>
-
-          <select name='options' ng-model="selectedItem"
+     <select  name='options' ng-model="selectedItem"
                   ng-options="item as item.name for item in list">
           </select>
-         
-<!--
-    <select ng-model="selectedItem" ng-change="changeSelectedItem(selectedItem)">
-        <option ng-repeat="item in list" item="item" item-type="item item-icon-left" class = "item-text-wrap">
-            {{item.name}}
-              </option>
-    //  <option>Blue</option>
-    //<option selected>Green</option>
-    //<option>Red</option>
-      
-    </select>
--->
-  </label>
+     </label>
+    </div>
+        <ion-checkbox ng-model="isDone" ng-change= "doneChanged()">Done</ion-checkbox>
+    </div>
+    
     
     <div align="center" id="timer" class="row">
         <span>{{minutes}}:{{seconds}}</span>
       </div>
+    
+    
       <div align="center" id="options"class="row">
         <button ng-click="play()">play</button>
         <button ng-click="pause()">pause</button>
