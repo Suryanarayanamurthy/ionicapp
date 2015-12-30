@@ -1,32 +1,56 @@
 <ion-view view-title="clock"  >
-<ion-content ng-controller="clockCtrl" ng-init="init()">
+<ion-content  ng-init="init()">
     
-     <label class="item item-input item-select">
+<!--
+<div class="row">
+    <div class="col  input-label">
+      Focus on :
+    </div>
+    <div class ="col col-50">
+          <select  name='options' ng-model="selectedItem"
+                  ng-options="item as item.name for item in list">
+          </select>
+        </div>
+    
+    <div class="col">
+         <ion-checkbox ng-model="isDone" ng-change= "doneChanged()">Done</ion-checkbox>
+</div>
+    
+</div>     
+-->
+    <div class="row">
+        <div class="col">
+    <label class="item item-input item-select">
     <div class="input-label">
       Focus on :
     </div>
-         <ion-checkbox ng-model="isDone" ng-change= "doneChanged()">Done</ion-checkbox>
-
-          <select name='options' ng-model="selectedItem"
+     <select  name='options' ng-model="selectedItem"
                   ng-options="item as item.name for item in list">
           </select>
-         
-<!--
-    <select ng-model="selectedItem" ng-change="changeSelectedItem(selectedItem)">
-        <option ng-repeat="item in list" item="item" item-type="item item-icon-left" class = "item-text-wrap">
-            {{item.name}}
-              </option>
-    //  <option>Blue</option>
-    //<option selected>Green</option>
-    //<option>Red</option>
-      
-    </select>
--->
-  </label>
+     </label>
+    </div>
+        <ion-checkbox ng-model="isDone" ng-change= "doneChanged()">Done</ion-checkbox>
+    </div>
     
-    <div align="center" id="timer" class="row">
+    
+    <section ng-click="toggleTimer()" class="padding">
+    <div class="timer">
+            <p class="title" ng-show="secession == 'work'">Pomodoro # {{pomoNum}}</p>
+            <p class="title" ng-show="secession == 'play'">Short Break</p>
+            <p class="title" ng-show="secession == 'playHard'">Long Break!!</p>
+      <p>{{minutes}}:{{seconds}}</p><span ng-style="{'height':fillHeight, 'background':fillColor }" class="fill"></span>
+    </div>
+  </section>
+    
+    
+<!--
+    <div  class="row timer">
         <span>{{minutes}}:{{seconds}}</span>
       </div>
+-->
+    
+<!--
+    
       <div align="center" id="options"class="row">
         <button ng-click="play()">play</button>
         <button ng-click="pause()">pause</button>
@@ -37,10 +61,46 @@
             <h3 ng-show="secession == 'play'">Short Break</h3>
             <h3 ng-show="secession == 'playHard'">Long Break!!</h3>
           </div>
+-->
     <div>
+
+<!--
         <ion-toggle ng-model= "cb_alarm">Alarm</ion-toggle>
         <ion-toggle ng-model= "cb_ticking" >Ticking</ion-toggle>
         <ion-toggle ng-model= "cb_wNoise" ng-change="toggleWhiteNoise()" >White Noise</ion-toggle>
+        
+-->
+<ul class="list">
+
+    <li class="item item-toggle">
+     Alarm
+     <label class="toggle toggle-assertive">
+       <input type="checkbox" ng-model= "cb_alarm" ng-change="toggleAlarm(cb_alarm)">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+    <li class="item item-toggle">
+     Ticking
+     <label class="toggle toggle-assertive">
+       <input type="checkbox" ng-model= "cb_ticking" ng-change="toggleticking(cb_ticking)">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+    <li class="item item-toggle">
+     White Noise
+     <label class="toggle toggle-assertive">
+       <input type="checkbox" ng-model= "cb_wNoise" ng-change="toggleWhiteNoise(cb_wNoise)">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+</ul>
+        
     </div>
       <div align="center"  class="row" >
           <div id="session" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >

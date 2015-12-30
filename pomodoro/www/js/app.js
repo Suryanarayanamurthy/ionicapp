@@ -5,6 +5,21 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.services' ,'PomodoroApp.controllers'])
 
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+      //initilize parse.
+      Parse.initialize("F5XCrepedBGlhJ9Mv7EvAIxY3ESu4bsWLbkWq52h", "eWrNoxx37SIRrB2KtFWsMKe3I05auYQUNnrTV07p");
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+})
+
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
@@ -12,7 +27,7 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
-//    controller: 'AppCtrl'
+    controller: 'AppCtrl'
   })
 
   .state('app.karma', {
@@ -30,7 +45,7 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
       views: {
         'menuContent': {
           templateUrl: 'templates/settings.html',
-//            controller: 'clockCtrl'
+            controller: 'clockCtrl'
         }
       }
     })
@@ -46,12 +61,14 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
   
     .state('app.clock', {
       url: '/clock',
+      
       views: {
         'menuContent': {
           templateUrl: 'templates/clock.html',
-            //controller: 'clockCtrl'
+            abstract: true,
+            controller: 'clockCtrl'
         }
-      }
+    }
     });
 
 //  .state('app.single', {
@@ -67,23 +84,12 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
   $urlRouterProvider.otherwise('/app/clock');
 })
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  });
-});
 
 angular.module('PomodoroApp.services', [])
   .factory('ListFactory', function() {
 
     var list = [];
+
     var listStore = localStorage.getItem("list");
     if (listStore != null && listStore != '' && angular.isArray(angular.fromJson(listStore))) {
       list = angular.fromJson(listStore);
@@ -92,6 +98,33 @@ angular.module('PomodoroApp.services', [])
       setList: function(newList) {
         list = newList;
         localStorage.setItem("list", angular.toJson(list));
+          
+          /////
+          
+          console.log("json:  "+angular.toJson(list));
+          console.log("obj:  "+list);
+
+//taskListObject.save(list).then(function(object) {
+//  console.log("wat do u know, i actually works");
+//});
+
+              var TaskListObject = Parse.Object.extend("TaskList");
+    var taskListObject = new TaskListObject();
+          
+          ///////////
+          taskListObject.set("taskList", angular.toJson(list));
+          taskListObject.save(null, {
+  success: function(taskListObject) {
+    // The object was saved successfully.
+      console.log("wat do u know, i actually works");
+  },
+  error: function(taskListObject, error) {
+    // The save failed.
+    // error is a Parse.Error with an error code and message.
+      console.log("error");
+  }
+});
+          //////
         return true;
       },
       getList: function() {
@@ -103,4 +136,54 @@ angular.module('PomodoroApp.services', [])
       }
     };
     return listSrv;
-  });
+  })
+//.factory('ParseServer',['$http','PARSE_CREDENTIALS',function($http,PARSE_CREDENTIALS){
+//    return {
+//        getAll:function(){
+//            return $http.get('https://api.parse.com/1/classes/Todo',{
+//                headers:{
+//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
+//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
+//                }
+//            });
+//        },
+//        get:function(id){
+//            return $http.get('https://api.parse.com/1/classes/Todo/'+id,{
+//                headers:{
+//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
+//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
+//                }
+//            });
+//        },
+//        create:function(data){
+//            return $http.post('https://api.parse.com/1/classes/Todo',data,{
+//                headers:{
+//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
+//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
+//                    'Content-Type':'application/json'
+//                }
+//            });
+//        },
+//        edit:function(id,data){
+//            return $http.put('https://api.parse.com/1/classes/Todo/'+id,data,{
+//                headers:{
+//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
+//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
+//                    'Content-Type':'application/json'
+//                }
+//            });
+//        },
+//        delete:function(id){
+//            return $http.delete('https://api.parse.com/1/classes/Todo/'+id,{
+//                headers:{
+//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
+//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
+//                    'Content-Type':'application/json'
+//                }
+//            });
+//        }
+//    }
+//}]).value('PARSE_CREDENTIALS',{
+//    APP_ID: 'F5XCrepedBGlhJ9Mv7EvAIxY3ESu4bsWLbkWq52h',
+//    REST_API_KEY:'eWrNoxx37SIRrB2KtFWsMKe3I05auYQUNnrTV07p'
+//});
