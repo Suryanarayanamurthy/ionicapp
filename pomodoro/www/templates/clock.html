@@ -62,7 +62,7 @@
             <h3 ng-show="secession == 'playHard'">Long Break!!</h3>
           </div>
 -->
-    <div>
+    
 
 <!--
         <ion-toggle ng-model= "cb_alarm">Alarm</ion-toggle>
@@ -101,7 +101,40 @@
   </li>
 </ul>
         
-    </div>
+<div class="list">
+  <div class="item range range-positive">
+      <label class="PacificoFontOneEM"> Secession</label>
+    <i class="icon ion-minus-round" ></i>
+    <input type="range"  min="0" max="100" value={{worktime}} ng-model="worktime" ng-change ="workUpdated(worktime)">
+    <i class="icon ion-plus-round" ></i>
+      <label class="PacificoFontTwoEM">{{worktime}}</label>
+  </div>
+            <div class="item range range-positive">
+      <label class="PacificoFontOneEM"> Break!</label>
+    <i class="icon ion-minus-round" ></i>
+    <input type="range"  min="0" max="100" value={{breaktime}} ng-model="breaktime" ng-change ="playUpdated(breaktime)">
+    <i class="icon ion-plus-round" ></i>
+      <label class="PacificoFontTwoEM">{{breaktime}}</label>
+  </div>
+            <div class="item range range-positive">
+      <label class="PacificoFontOneEM"> Long Break !!</label>
+    <i class="icon ion-minus-round" ></i>
+    <input type="range"  min="0" max="100" value={{longBreaktime}} ng-model="longBreaktime" ng-change ="playHardUpdated(longBreaktime)">
+    <i class="icon ion-plus-round" ></i>
+      <label class="PacificoFontTwoEM">{{longBreaktime}}</label>
+  </div>
+<!--
+    <div>
+    <button class="button button-block button-positive" ng-click="reset()">
+  Reset
+</button>
+        </div>
+    
+-->
+</div>
+     
+    
+<!--
       <div align="center"  class="row" >
           <div id="session" class="col-md-4 col-xs-4 col-lg-4 col-sm-4" >
           <div class="row"><h3>Secession</h3></div>
@@ -133,5 +166,6 @@
        <button ng-click="reset()">Reset</button>
       </div>
       
+-->
     </ion-content>
     </ion-view>

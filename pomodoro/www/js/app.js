@@ -5,6 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.services' ,'PomodoroApp.controllers'])
 
+
+//
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
       //initilize parse.
@@ -19,6 +21,7 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
     }
   });
 })
+
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -45,7 +48,7 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
       views: {
         'menuContent': {
           templateUrl: 'templates/settings.html',
-            controller: 'clockCtrl'
+            //controller: 'clockCtrl'
         }
       }
     })
@@ -65,7 +68,6 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
       views: {
         'menuContent': {
           templateUrl: 'templates/clock.html',
-            abstract: true,
             controller: 'clockCtrl'
         }
     }
@@ -85,11 +87,23 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
 })
 
 
+//.run(
+//    ['$rootScope', '$state', '$stateParams',
+//      function ($rootScope, $state, $stateParams) {
+//          $rootScope.$state = $state;
+//          $rootScope.$stateParams = $stateParams;
+//      }
+//    ])
+//
+
 angular.module('PomodoroApp.services', [])
   .factory('ListFactory', function() {
 
     var list = [];
-
+    var TaskListObject = Parse.Object.extend("TaskList");
+    var taskListObject = new TaskListObject();
+    var query = new Parse.Query(TaskListObject);
+      var ObjId;
     var listStore = localStorage.getItem("list");
     if (listStore != null && listStore != '' && angular.isArray(angular.fromJson(listStore))) {
       list = angular.fromJson(listStore);
@@ -102,21 +116,20 @@ angular.module('PomodoroApp.services', [])
           /////
           
           console.log("json:  "+angular.toJson(list));
-          console.log("obj:  "+list);
+          
 
 //taskListObject.save(list).then(function(object) {
 //  console.log("wat do u know, i actually works");
 //});
 
-              var TaskListObject = Parse.Object.extend("TaskList");
-    var taskListObject = new TaskListObject();
-          
+              
           ///////////
           taskListObject.set("taskList", angular.toJson(list));
           taskListObject.save(null, {
   success: function(taskListObject) {
     // The object was saved successfully.
-      console.log("wat do u know, i actually works");
+      ObjId = taskListObject.id;
+      console.log("wat do u know, it actually works"+ "obj id: "+ ObjId);
   },
   error: function(taskListObject, error) {
     // The save failed.
@@ -128,6 +141,19 @@ angular.module('PomodoroApp.services', [])
         return true;
       },
       getList: function() {
+          var foo = taskListObject.get("taskList");
+          console.log(foo);
+//          query.get(ObjId,{
+//  success: function(myObject) {
+//    console.log("success in getting" + myObject);
+//      list = myObject;
+//  },
+//  error: function(myObject, error) {
+//    // The object was not refreshed successfully.
+//    console.log(" error in getting ."+error.message);
+//  }
+//});
+          
         if (list != null) {
           return list;
         } else {

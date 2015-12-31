@@ -11,6 +11,15 @@ section .title {
   font-size: .5em;
     font-family: 'Pacifico';
 }
+.PacificoFontTwoEM{
+    font-family: 'Pacifico';
+    font-size: 2em;
+}
+.PacificoFontOneEM{
+    font-family: 'Pacifico';
+    font-size: 1em;
+}
+
 section .timer {
   margin: 0 auto;
   text-align: center;
