@@ -25,14 +25,12 @@
       Focus on :
     </div>
      <select  name='options' ng-model="selectedItem"
-                  ng-options="item as item.name for item in list">
+                  ng-options="item as item.name for item in list" ng-change="selectedItemChanged(selectedItem)">
           </select>
      </label>
     </div>
         <ion-checkbox ng-model="isDone" ng-change= "doneChanged()">Done</ion-checkbox>
     </div>
-    
-    
     <section ng-click="toggleTimer()" class="padding">
     <div class="timer">
             <p class="title" ng-show="secession == 'work'">Pomodoro # {{pomoNum}}</p>
