@@ -3,11 +3,12 @@
 -->
 <ion-view  view-title="Karma">
 	<ion-content has-header="true">
-        <button ng-click="showAddChangeDialog('add')">left button</button>
+        <button class="button button-block button-balanced"
+                ng-click="showAddChangeDialog('add')">Add New Task</button>
         
 		<ion-list  can-swipe="true">
-			<label class="item item-divider">
-    			List
+			<label class="item item-divider" align="center">
+    			Task List
   			</label>
   			<ion-item ng-if="list.length == 0">
 				Press <i class="icon ion-plus"></i> to add item
