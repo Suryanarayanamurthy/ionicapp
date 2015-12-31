@@ -121,11 +121,11 @@ angular.module('PomodoroApp.controllers', [])
         ListFactory.setList($scope.list);
         return newItem;
     };
+    
     // called using a promise todo the countdown on the screen, here all the behaviour of the app is done.
     // called this functiontion irrespective of the type of secession we are in.
     function ShowTime(){
-    $scope.minutes = Math.floor(timeLeft / 60);
-    $scope.seconds = timeLeft - ($scope.minutes * 60);
+    displaySecToMnS(timeLeft);
     timeLeft -= 1;
       //logic when a work secession is over.
     if($scope.secession == "work" && timeLeft <= 0)
@@ -200,6 +200,13 @@ angular.module('PomodoroApp.controllers', [])
     $scope.fillHeight = perc + '%';
     };
     
+    
+    // display the remaining secs to mins and seconds
+    function displaySecToMnS(timeLeft){
+    $scope.minutes = Math.floor(timeLeft / 60);
+    $scope.seconds = timeLeft - ($scope.minutes * 60);
+    };
+    
     // when play button is clicked call the showTime for every once second, 
     // irrespective of the secession we are in right now,
     //because the logic for handiling behaviour during each secession is on showtime function.
@@ -232,7 +239,7 @@ angular.module('PomodoroApp.controllers', [])
     // and cancel the existing promise.
   $scope.reset = function()
   {
-  $interval.cancel(promise);
+  
   $scope.breaktime =5;
   $scope.worktime =25;
   $scope.minutes=25;
@@ -240,6 +247,7 @@ angular.module('PomodoroApp.controllers', [])
   $scope.longBreaktime =15;
   timeLeft = $scope.worktime * 60;
   $scope.secession = "work";
+      $interval.cancel(promise);
   };
   
   $scope.toggleWhiteNoise = function(cb_wNoise){
@@ -294,24 +302,25 @@ angular.module('PomodoroApp.controllers', [])
   if($scope.secession == "work")
       
   timeLeft = $scope.worktime*60;
+      displaySecToMnS(timeLeft);
 
-  if($scope.worktime < 0) $scope.worktime = 0;
+//  if($scope.worktime < 0) $scope.worktime = 0;
   };
   $scope.playUpdated = function(breaktime)
   {
       $scope.breaktime = breaktime;
     if($scope.secession == "play")
     timeLeft = $scope.breaktime *60;
-
-    if($scope.breaktime < 0 ) $scope.breaktime =0;
+displaySecToMnS(timeLeft);
+//    if($scope.breaktime < 0 ) $scope.breaktime =0;
   };
   $scope.playHardUpdated = function(longBreaktime)
   {
       $scope.longBreaktime = longBreaktime;
       if($scope.secession == "playHard")
           timeLeft =$scope.longBreaktime *60;
-      
-      if($scope.longBreaktime < 0 ) $scope.longBreaktime =0;
+      displaySecToMnS(timeLeft);
+//      if($scope.longBreaktime < 0 ) $scope.longBreaktime =0;
   };
   
   //update the selected item
