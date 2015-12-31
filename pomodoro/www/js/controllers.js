@@ -359,34 +359,6 @@ displaySecToMnS(timeLeft);
         ListFactory.setList($scope.list);
     };
   
-//    function editItem(selectedItem) {
-//        var item = {};
-//        item.name = selectedItem.$modelValue;
-//        item.description = selectedItem.$modelValue;
-//        item.useAsDefault = true;
-//
-//        var editIndex = ListFactory.getList().indexOf(selectedItem);
-//        $scope.list[editIndex] = item;
-//        
-//        ListFactory.setList(list);
-//        
-//          makeDefault(item);
-//      }
-//    
-//    function makeDefault(item){
-//        //Remove existing default
-//        for (var i = 0; i < $scope.list.length; i++) {
-//          if ($scope.list[i].useAsDefault == true) {
-//            $scope.list[i].useAsDefault = false;
-//          }
-//        }
-//        
-//        var newDefaultIndex = list.indexOf(item);
-//        list[newDefaultIndex].useAsDefault = true;
-//        ListFactory.setList(list);
-//    }
-    
-  
 }])
 
 .controller('karmaCtrl', ['ListFactory', '$scope', '$ionicModal',
@@ -429,16 +401,8 @@ displaySecToMnS(timeLeft);
         // Add values from form to object
         newItem.name = form.name.$modelValue;
         newItem.description = form.description.$modelValue;
-        newItem.useAsDefault = form.useAsDefault.$modelValue;
-        // If this is the first item it will be the default item
-        if ($scope.list.length == 0) {
-          newItem.useAsDefault = true;
-        } else {
-          // Remove old default entry from list	
-          if (newItem.useAsDefault) {
-            removeDefault();
-          }
-        }
+        
+        
           // add pomodoros default values
           newItem.pomoNum = 0;
           newItem.pomoCycles =0;
@@ -454,29 +418,13 @@ displaySecToMnS(timeLeft);
       $scope.removeItem = function(item) {
         // Search & Destroy item from list
         $scope.list.splice($scope.list.indexOf(item), 1);
-        // If this item was the Default we set first item in list to default
-        if (item.useAsDefault == true && $scope.list.length != 0) {
-          $scope.list[0].useAsDefault = true;
-        }
+       
         // Save list in factory
         ListFactory.setList($scope.list);
       }
 
-      $scope.makeDefault = function(item) {
-        removeDefault();
-        var newDefaultIndex = $scope.list.indexOf(item);
-        $scope.list[newDefaultIndex].useAsDefault = true;
-        ListFactory.setList($scope.list);
-      }
+      
 
-      function removeDefault() {
-        //Remove existing default
-        for (var i = 0; i < $scope.list.length; i++) {
-          if ($scope.list[i].useAsDefault == true) {
-            $scope.list[i].useAsDefault = false;
-          }
-        }
-      }
 
       $scope.showEditItem = function(item) {
         // Remember edit item to change it later
@@ -485,7 +433,6 @@ displaySecToMnS(timeLeft);
         // Preset form values
         $scope.form.name.$setViewValue(item.name);  
         $scope.form.description.$setViewValue(item.description);
-        $scope.form.useAsDefault.$setViewValue(item.useAsDefault);
         // Open dialog
         $scope.showAddChangeDialog('change');
       };
@@ -494,19 +441,9 @@ displaySecToMnS(timeLeft);
         var item = {};
         item.name = form.name.$modelValue;
         item.description = form.description.$modelValue;
-        item.useAsDefault = form.useAsDefault.$modelValue;
-
         var editIndex = ListFactory.getList().indexOf($scope.tmpEditItem);
         $scope.list[editIndex] = item;
-        // Set first item to default
-        if ($scope.tmpEditItem.useAsDefault == true && item.useAsDefault == false) {
-          $scope.list[0].useAsDefault = true;
-        }
-
         ListFactory.setList($scope.list);
-        if (item.useAsDefault) {
-          $scope.makeDefault(item);
-        }
         $scope.leaveAddChangeDialog();
       };
     }
