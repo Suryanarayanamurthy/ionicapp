@@ -43,10 +43,7 @@ angular.module('PomodoroApp.controllers', [])
 
 .controller('clockCtrl', ['ListFactory','$scope', '$interval', '$timeout' ,function(ListFactory, $scope, $interval, $timeout) {
   
-  
-  var promise;
-    
-  
+    var promise;
     //source for the audio track, to notifification when the counddown reaches 0.
     // TODO: make the resourse local.
     //var wav = 'http://www.oringz.com/oringz-uploads/sounds-917-communication-channel.mp3';
@@ -64,10 +61,10 @@ angular.module('PomodoroApp.controllers', [])
     var timeLeft;
     var pomoNumber = 0;
     var playTimer = false;
-// using init() as the constructor
+    // using init() as the constructor
   
     $scope.init = function (){
-  //initial default value of all the parameters you see on the page.
+    //initial default value of all the parameters you see on the page.
     $scope.breaktime =5;
     $scope.worktime =25;
     $scope.longBreaktime =15;
@@ -78,29 +75,36 @@ angular.module('PomodoroApp.controllers', [])
     $scope.cb_ticking = true;
     $scope.cb_wNoise = false;
     $scope.secession = "work";
-
+    // timeLeft should me defined after the worktime is assigned.
+    timeLeft  = $scope.worktime * 60;
     // Get list from storage
     $scope.list = ListFactory.getList();
-    timeLeft  = $scope.worktime * 60;
-};
-    
+    // see if the list is empty, if yes create a default item and select it.
+    if( $scope.list.length == 0 )
+    {
+    $scope.selectedItem = createDefaultTaskItem();
+    }
+    //else select the 1st task item as selected item, 
+    else
+    {
+    $scope.selectedItem = $scope.list[0];
+    }
+    };
     
     //To listen for when this page is active (for example, to refresh data),
     // listen for the $ionicView.enter event:
-  $scope.$on('$ionicView.enter', function(e) {
-        // Get list from storage
-  $scope.list = ListFactory.getList();
-  
-          if( $scope.list.length == 0 )
-    {
-        
-        $scope.selectedItem = createDefaultTaskItem();
-        
-    }
-    else
-    {
-        $scope.selectedItem = $scope.list[0];
-    }
+    $scope.$on('$ionicView.enter', function(e) {
+//        // Get list from storage
+//      $scope.list = ListFactory.getList();
+//  
+//          if( $scope.list.length == 0 )
+//        {
+//        $scope.selectedItem = createDefaultTaskItem();
+//        }
+//      else
+//        {
+//            $scope.selectedItem = $scope.list[0];
+//        }
   });
 
     
@@ -210,13 +214,12 @@ angular.module('PomodoroApp.controllers', [])
     // when play button is clicked call the showTime for every once second, 
     // irrespective of the secession we are in right now,
     //because the logic for handiling behaviour during each secession is on showtime function.
-  $scope.play = function() {
+    $scope.play = function() {
     promise = $interval(ShowTime,1000,0);
   };
     // cancel the promise when pause button is clicked, the play will continue from where we left of 
     //becuase the current secession and the time where we paused is in the variables "timeLeft" and "secession".
-  $scope.pause = function()
-  {
+    $scope.pause = function(){
      $interval.cancel(promise);
   };
     
@@ -237,8 +240,8 @@ angular.module('PomodoroApp.controllers', [])
     // reset all the variables to default;
     // work = 25mins, break = 5 mins, long break = 15 mins and secession = work.
     // and cancel the existing promise.
-  $scope.reset = function()
-  {
+    $scope.reset = function(){
+        
   
   $scope.breaktime =5;
   $scope.worktime =25;
@@ -250,7 +253,7 @@ angular.module('PomodoroApp.controllers', [])
       $interval.cancel(promise);
   };
   
-  $scope.toggleWhiteNoise = function(cb_wNoise){
+    $scope.toggleWhiteNoise = function(cb_wNoise){
       $scope.cb_wNoise = cb_wNoise;
     if($scope.cb_wNoise){
     switch($scope.secession) {
@@ -285,7 +288,7 @@ angular.module('PomodoroApp.controllers', [])
     }
     };
   
-  $scope.toggleAlarm = function (cb_alarm){
+    $scope.toggleAlarm = function (cb_alarm){
       $scope.cb_alarm = cb_alarm;
   };
     
@@ -324,9 +327,8 @@ displaySecToMnS(timeLeft);
   };
   
   //update the selected item
-  $scope.changeSelectedItem = function(selectedItem){
-      //editItem(selectedItem);
-      //
+  $scope.selectedItemChanged = function(selectedItem){
+      $scope.selectedItem = selectedItem;
   };
   
   $scope.doneChanged = function(){
