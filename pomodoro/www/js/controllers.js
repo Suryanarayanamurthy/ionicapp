@@ -43,13 +43,11 @@ angular.module('PomodoroApp.controllers', [])
 
 .controller('clockCtrl', ['ListFactory','$scope', '$interval', '$timeout' ,function(ListFactory, $scope, $interval, $timeout) {
   
-    var promise;
+    
     //source for the audio track, to notifification when the counddown reaches 0.
-    // TODO: make the resourse local.
     //var wav = 'http://www.oringz.com/oringz-uploads/sounds-917-communication-channel.mp3';
     var alarmFile = 'resources/alarm.mp3';
     var tickingFile = 'resources/tick.mp3';
-    //var whiteNoiseFile = 'resources/whitenoise.mp3';
     var longbreak_deltaFile = 'resources/longbreak_delta.mp3';
     var shortbreak_high_alphaFile = 'resources/shortbreak_high_alpha.mp3';
     var Work_gammaFile = 'resources/Work_gamma.mp3';
@@ -61,6 +59,7 @@ angular.module('PomodoroApp.controllers', [])
     var timeLeft;
     var pomoNumber = 0;
     var playTimer = false;
+    var promise;
     // using init() as the constructor
   
     $scope.init = function (){
@@ -94,18 +93,14 @@ angular.module('PomodoroApp.controllers', [])
     //To listen for when this page is active (for example, to refresh data),
     // listen for the $ionicView.enter event:
     $scope.$on('$ionicView.enter', function(e) {
-//        // Get list from storage
-//      $scope.list = ListFactory.getList();
-//  
-//          if( $scope.list.length == 0 )
+//        //we cannot have empy item selected in the select control.
+//        if($scope.selectedItem == null)
 //        {
-//        $scope.selectedItem = createDefaultTaskItem();
+//            //set it to the other task item.
+//            $scope.selectedItem =  $scope.list[0];
 //        }
-//      else
-//        {
-//            $scope.selectedItem = $scope.list[0];
-//        }
-  });
+          
+    });
 
     
     function createDefaultTaskItem()
@@ -118,7 +113,7 @@ angular.module('PomodoroApp.controllers', [])
         // add pomodoros default values
         newItem.pomoNum = 0;
         newItem.pomoCycles =0;
-        newItem.Isdone = false;
+        
           
         // Save new list in scope and factory
         $scope.list.push(newItem);
@@ -136,9 +131,7 @@ angular.module('PomodoroApp.controllers', [])
     {
         $scope.pomoNum++;
         // increment the pomo number for the selected task
-        $scope.selectedItem.pomoNum++;
-        // save it to the list
-        saveTaskList($scope.selectedItem);
+        updateSelectedItemPomoNum();
         //if($scope.pomoNum >= 4)
         if($scope.pomoNum > 4)
             {
@@ -147,10 +140,7 @@ angular.module('PomodoroApp.controllers', [])
                 // change the white noise to break time
                 $scope.toggleWhiteNoise();
                 // increment the pomo cycles for the selected task
-                $scope.selectedItem.pomoCycles++;
-                //save the selected task with the updated info.
-                saveTaskList($scope.selectedItem);
-                console.log("pomodoro cycle: " + $scope.selectedItem.pomoCycles);
+                updateSelectedItemPomoCycle();
             }
         else{
                 $scope.secession = "play";
@@ -181,6 +171,32 @@ angular.module('PomodoroApp.controllers', [])
     tickingAudio.play();
         fillHeightNdColor();
 };
+    
+    function updateSelectedItemPomoNum(){
+        //scenario wen the selected item is deleted from the karma page.
+        if(ListFactory.getList().indexOf($scope.selectedItem) ==-1)
+        {
+            //set it to the other taask item.
+            $scope.selectedItem =  $scope.list[0];
+        }
+        $scope.selectedItem.pomoNum++;
+        // save it to the updated value to the list.
+        saveTaskList($scope.selectedItem);
+        
+    };
+    
+    function updateSelectedItemPomoCycle(){
+        //scenario wen the selected item is deleted from the karma page.
+        if(ListFactory.getList().indexOf($scope.selectedItem) ==-1)
+        {
+            //set it to the other taask item.
+            $scope.selectedItem =  $scope.list[0];
+        }
+        $scope.selectedItem.pomoCycles++;
+        //save the selected task with the updated info.
+        saveTaskList($scope.selectedItem);
+    };
+    
 
     function fillHeightNdColor()
     {
@@ -331,9 +347,7 @@ displaySecToMnS(timeLeft);
       $scope.selectedItem = selectedItem;
   };
   
-  $scope.doneChanged = function(){
-      $scope.selectedItem.Isdone = $scope.isDone;
-  };
+ 
   
   function saveTaskList(item)
     {
