@@ -86,130 +86,178 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
   $urlRouterProvider.otherwise('/app/clock');
 })
 
-
-//.run(
-//    ['$rootScope', '$state', '$stateParams',
-//      function ($rootScope, $state, $stateParams) {
-//          $rootScope.$state = $state;
-//          $rootScope.$stateParams = $stateParams;
-//      }
-//    ])
-//
-
 angular.module('PomodoroApp.services', [])
-  .factory('ListFactory', function() {
+  .factory('ListFactory', function($ionicPopup,$timeout,$q) {
 
     var list = [];
-    var TaskListObject = Parse.Object.extend("TaskList");
-    var taskListObject = new TaskListObject();
-    var query = new Parse.Query(TaskListObject);
-      var ObjId;
+    var parseObjId;
+    var ParseObjIdStore =  localStorage.getItem("objID");
+    var ParseString = Parse.Object.extend("TaskList");
+    var parseObject = new ParseString();
     var listStore = localStorage.getItem("list");
+    
+    
     if (listStore != null && listStore != '' && angular.isArray(angular.fromJson(listStore))) {
       list = angular.fromJson(listStore);
     }
-    var listSrv = {
-      setList: function(newList) {
-        list = newList;
-        localStorage.setItem("list", angular.toJson(list));
-          
-          /////
-          
-          console.log("json:  "+angular.toJson(list));
-          
-
-//taskListObject.save(list).then(function(object) {
-//  console.log("wat do u know, i actually works");
-//});
-
-              
-          ///////////
-          taskListObject.set("taskList", angular.toJson(list));
-          taskListObject.save(null, {
-  success: function(taskListObject) {
+  
+    // if the parse's object id is saved locally then reuse it
+    if (ParseObjIdStore != null && ParseObjIdStore != '') {
+        
+       
+      parseObjId =   ParseObjIdStore;
+        
+    }
+    // else save a new obj in parse and get it's id, and save it locally for further use.
+    else
+    {
+          parseObject.save(null, {
+  success: function(newObj) {
     // The object was saved successfully.
-      ObjId = taskListObject.id;
-      console.log("wat do u know, it actually works"+ "obj id: "+ ObjId);
+      parseObjId = newObj.id;
+     localStorage.setItem("objID",parseObjId);
   },
-  error: function(taskListObject, error) {
+  error: function(newObj, error) {
     // The save failed.
     // error is a Parse.Error with an error code and message.
-      console.log("error");
-  }
-});
-          //////
+      console.log(error.message);
+        }
+    });
+    }
+    var listSrv = {
+        setList: function(newList) {
+        list = newList;
+         localStorage.setItem("list", angular.toJson(list));
         return true;
       },
-      getList: function() {
-          var foo = taskListObject.get("taskList");
-          console.log(foo);
-//          query.get(ObjId,{
-//  success: function(myObject) {
-//    console.log("success in getting" + myObject);
-//      list = myObject;
-//  },
-//  error: function(myObject, error) {
-//    // The object was not refreshed successfully.
-//    console.log(" error in getting ."+error.message);
-//  }
-//});
-          
-        if (list != null) {
+        
+         getList: function() {
+         if (list != null) {
           return list;
         } else {
           return [];
         }
+      },
+    
+        
+        setInParse: function(){
+          //
+          var showMessage;
+            //upload the list to the existing object, using parseObjID as the key
+          if(parseObjId != null && parseObjId !='')
+          {
+          
+            var query = new Parse.Query(ParseString);
+              query.get(parseObjId, {
+  success: function(response) {
+    // The object was retrieved successfully.
+      response.set('taskList', angular.toJson(list));
+      //response.set('taskList', JSON.stringify(list));
+      response.save(null, {
+  success: function(result) {
+    // The object was saved successfully.
+      
+      showMessage = "<h3>Success!!</h3>,<br><b> Obj id: "+ parseObjId +"</b><br> saved the Json object<br>"+angular.toJson(list) ;
+      showPopup("Message from Server",showMessage);
+  },
+  error: function(taskListObject, error) {
+      showMessage ="<h3> Error :-( </h3> <br> something went wrong, error code is: "+ error.code+ "and error message is: " +    error.message;
+      showPopup("Message from Server", showMessage);
       }
-    };
+        });
+  },
+  error: function(object, error) {
+    showMessage ="<h3> Error :-( </h3> <br> something went wrong, error code is: "+ error.code+ "and error message is: " +    error.message;
+      showPopup("Message from Server",showMessage);
+  }
+});
+             
+    }
+            // create a new object in parse and save the object id.
+          else{
+              parseObject.set('taskList', angular.toJson(list));
+               parseObject.save(null, {
+  success: function(newObj) {
+    // The object was saved successfully.
+      parseObjId = newObj.id;
+     localStorage.setItem("objID",parseObjId);
+      showMessage = "<h3>Success!!</h3>,<br><b> Obj id: "+ parseObjId +"</b><br> saved the Json object<br>"+angular.toJson(list) ;
+      showPopup("Message from Server",showMessage);
+  },
+                   error: function(object, error) {
+    showMessage ="<h3> Error :-( </h3> <br> something went wrong, error code is: "+ error.code+ "and error message is: " +    error.message;
+      showPopup("Message from Server",showMessage);
+  }
+                   
+               });
+                                
+}},
+        // perform asynchronous get,
+        // 1st look for the list in the local storage if not available then try getting it from the server.        
+         getListAsync: function(){
+              return $q(function(resolve, reject) {
+                          //list is available locally.
+                   if (listStore != null && listStore != '') {
+          resolve(list);
+        }        
+                  // else try to get it from the Parse using the object id
+                  else
+                  {
+                      // if the parse's object id is saved locally then reuse it
+        if (parseObjId != null && parseObjId != '') {
+          
+          
+            var query = new Parse.Query(ParseString);
+              query.get(parseObjId, {
+  success: function(response) {
+      
+      list = angular.fromJson(response.get("taskList"));
+      resolve(list);
+  },
+  error: function(object, error) {
+      console.log("get from parse had an error: " + error.message);
+      reject("get from parse had an error: " + error.message);
+  }
+});
+
+        
+    }
+    // else save a new obj in parse and get it's id, and save it locally for further use.
+                      // and return an empty list.
+    else
+    {
+          parseObject.save(null, {
+  success: function(newObj) {
+    // The object was saved successfully.
+      parseObjId = newObj.id;
+     localStorage.setItem("objID",parseObjId);
+      resolve([]);
+      
+  },
+  error: function(newObj, error) {
+    // The save failed.
+    // error is a Parse.Error with an error code and message.
+      console.log(error.message);
+      reject( "could not create an object in Parse"+error.message);
+        }
+    });
+    }
+                  }
+          
+  });
+
+    }
+};
+     
+    function showPopup(titleText,subtitleTest) {
+   
+   var myPopup = $ionicPopup.show({
+     title: titleText,
+     subTitle: subtitleTest,
+   });
+   $timeout(function() {
+      myPopup.close(); //close the popup after 3 seconds for some reason
+   }, 4000);
+  };
     return listSrv;
   })
-//.factory('ParseServer',['$http','PARSE_CREDENTIALS',function($http,PARSE_CREDENTIALS){
-//    return {
-//        getAll:function(){
-//            return $http.get('https://api.parse.com/1/classes/Todo',{
-//                headers:{
-//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
-//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
-//                }
-//            });
-//        },
-//        get:function(id){
-//            return $http.get('https://api.parse.com/1/classes/Todo/'+id,{
-//                headers:{
-//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
-//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
-//                }
-//            });
-//        },
-//        create:function(data){
-//            return $http.post('https://api.parse.com/1/classes/Todo',data,{
-//                headers:{
-//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
-//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
-//                    'Content-Type':'application/json'
-//                }
-//            });
-//        },
-//        edit:function(id,data){
-//            return $http.put('https://api.parse.com/1/classes/Todo/'+id,data,{
-//                headers:{
-//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
-//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
-//                    'Content-Type':'application/json'
-//                }
-//            });
-//        },
-//        delete:function(id){
-//            return $http.delete('https://api.parse.com/1/classes/Todo/'+id,{
-//                headers:{
-//                    'X-Parse-Application-Id': PARSE_CREDENTIALS.APP_ID,
-//                    'X-Parse-REST-API-Key':PARSE_CREDENTIALS.REST_API_KEY,
-//                    'Content-Type':'application/json'
-//                }
-//            });
-//        }
-//    }
-//}]).value('PARSE_CREDENTIALS',{
-//    APP_ID: 'F5XCrepedBGlhJ9Mv7EvAIxY3ESu4bsWLbkWq52h',
-//    REST_API_KEY:'eWrNoxx37SIRrB2KtFWsMKe3I05auYQUNnrTV07p'
-//});
