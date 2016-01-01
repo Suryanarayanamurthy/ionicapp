@@ -74,11 +74,14 @@ angular.module('PomodoroApp.controllers', [])
     $scope.cb_ticking = true;
     $scope.cb_wNoise = false;
     $scope.secession = "work";
+    $scope.currentAudio = "";
     // timeLeft should me defined after the worktime is assigned.
     timeLeft  = $scope.worktime * 60;
-    // Get list from storage
-    $scope.list = ListFactory.getList();
-    // see if the list is empty, if yes create a default item and select it.
+        // Get list from the service
+        var promise = ListFactory.getListAsync();
+            promise.then(function(listFromService){
+                $scope.list = listFromService;
+                // see if the list is empty, if yes create a default item and select it.
     if( $scope.list.length == 0 )
     {
     $scope.selectedItem = createDefaultTaskItem();
@@ -88,17 +91,33 @@ angular.module('PomodoroApp.controllers', [])
     {
     $scope.selectedItem = $scope.list[0];
     }
+          
+            },function(errorMsg){
+                $scope.list = [];
+             console.log("could not do async get from controller");
+            });
+        
+    
     };
     
     //To listen for when this page is active (for example, to refresh data),
     // listen for the $ionicView.enter event:
     $scope.$on('$ionicView.enter', function(e) {
-//        //we cannot have empy item selected in the select control.
-//        if($scope.selectedItem == null)
-//        {
-//            //set it to the other task item.
-//            $scope.selectedItem =  $scope.list[0];
-//        }
+// // Get list from the service
+//        var promise = ListFactory.getListAsync();
+//            promise.then(function(listFromService){
+//                $scope.list = listFromService;
+//               
+//                // see if the list is empty, if yes create a default item and select it.
+//    if( $scope.list.length == 0 )
+//    {
+//    $scope.selectedItem = createDefaultTaskItem();
+//    }
+//       
+//            },function(errorMsg){
+//                $scope.list = [];
+//             console.log("could not do async get from controller");
+//            });
           
     });
 
@@ -176,17 +195,16 @@ angular.module('PomodoroApp.controllers', [])
         //scenario wen the selected item is deleted from the karma page.
         if(ListFactory.getList().indexOf($scope.selectedItem) ==-1)
         {
-            //set it to the other taask item.
-            $scope.selectedItem =  $scope.list[0];
-        }
-        $scope.selectedItem.pomoNum++;
+            //set it to the "other" task item
+             $scope.selectedItem =  $scope.list[0];
+            }
+         $scope.selectedItem.pomoNum++;
         // save it to the updated value to the list.
         saveTaskList($scope.selectedItem);
-        
     };
     
     function updateSelectedItemPomoCycle(){
-        //scenario wen the selected item is deleted from the karma page.
+          //scenario wen the selected item is deleted from the karma page.
         if(ListFactory.getList().indexOf($scope.selectedItem) ==-1)
         {
             //set it to the other taask item.
@@ -266,11 +284,14 @@ angular.module('PomodoroApp.controllers', [])
   $scope.longBreaktime =15;
   timeLeft = $scope.worktime * 60;
   $scope.secession = "work";
+  $scope.currentAudio ="";
       $interval.cancel(promise);
   };
   
     $scope.toggleWhiteNoise = function(cb_wNoise){
-      $scope.cb_wNoise = cb_wNoise;
+        // this if is required bcos togglewhitenoise is also called locally and the cb_wNoise is set to undefined.
+        if(cb_wNoise != undefined)
+            $scope.cb_wNoise = cb_wNoise;
     if($scope.cb_wNoise){
     switch($scope.secession) {
     case "work":{
@@ -278,6 +299,7 @@ angular.module('PomodoroApp.controllers', [])
     workAudio.loop;
     longBreakAudio.pause();
     shortBreakAudio.pause();
+    $scope.currentAudio = "Gamma";
     break;
     }
     case "play":{
@@ -285,6 +307,7 @@ angular.module('PomodoroApp.controllers', [])
     shortBreakAudio.loop;
     workAudio.pause();
     longBreakAudio.pause();
+    $scope.currentAudio = "Alpha";
     break;
     }
     case "playHard":{
@@ -292,6 +315,7 @@ angular.module('PomodoroApp.controllers', [])
     longBreakAudio.loop;
     workAudio.pause();
     shortBreakAudio.pause();
+    $scope.currentAudio = "Delta";
     break;
     }
     }
@@ -301,6 +325,7 @@ angular.module('PomodoroApp.controllers', [])
         workAudio.pause();
         shortBreakAudio.pause();
         longBreakAudio.pause();
+        $scope.currentAudio = "";
     }
     };
   
@@ -351,18 +376,30 @@ displaySecToMnS(timeLeft);
   
   function saveTaskList(item)
     {
-        if(item !== undefined)
+         if(item !== undefined)
         {
             var editIndex = ListFactory.getList().indexOf(item);
             $scope.list[editIndex] = item;
         }
         ListFactory.setList($scope.list);
+        
     };
   
 }])
 
-.controller('karmaCtrl', ['ListFactory', '$scope', '$ionicModal',
-    function(ListFactory, $scope, $ionicModal) {
+.controller('karmaCtrl', ['ListFactory', '$scope', '$ionicModal','$timeout',
+    function(ListFactory, $scope, $ionicModal, $timeout) {
+        
+      // Get list from the service
+        var promise = ListFactory.getListAsync();
+            promise.then(function(listOnServerDB){
+                $scope.list = listOnServerDB;
+          
+            },function(errorMsg){
+                $scope.list = [];
+             console.log("could not do async get from controller");
+            });
+        
         $ionicModal.fromTemplateUrl('templates/add-change-dialog.html', {
         scope: $scope,
         animation: 'slide-in-up'
@@ -388,8 +425,6 @@ displaySecToMnS(timeLeft);
         });
       };
 
-      // Get list from storage
-      $scope.list = ListFactory.getList();
 
       // Used to cache the empty form for Edit Dialog
       $scope.saveEmpty = function(form) {
@@ -423,9 +458,6 @@ displaySecToMnS(timeLeft);
         ListFactory.setList($scope.list);
       }
 
-      
-
-
       $scope.showEditItem = function(item) {
         // Remember edit item to change it later
         $scope.tmpEditItem = item;
@@ -446,5 +478,19 @@ displaySecToMnS(timeLeft);
         ListFactory.setList($scope.list);
         $scope.leaveAddChangeDialog();
       };
+        
+        $scope.doRefresh = function(){
+            //refresh the task list saved locally, and set it to the list.
+            $scope.list = ListFactory.getList();
+             $timeout( function() {
+                 ListFactory.setInParse();
+        
+                 //Stop the ion-refresher from spinning
+      $scope.$broadcast('scroll.refreshComplete');
+                  }, 1000);
+            
+        };
+        
+        
     }
   ]);
