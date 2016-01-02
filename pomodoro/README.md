@@ -15,7 +15,7 @@ A pomodoro timer is a tool to be used when executing the Pomodoro Technique for 
 <ul> name and description for each task.</ul>
 <ul> save the list locally</ul>
 <ul>count the number of pomodoros and pomodoro cycles done for each task. </ul>
-
+<ul>Connect to Parse-Backend to persist data </ul>
 
 <h2>Run Number</h2>
 <ul>The run number deﬁnes the number of pomodoros after that a long break is started automatically.</ul><br>
@@ -24,10 +24,8 @@ A pomodoro timer is a tool to be used when executing the Pomodoro Technique for 
  <ul>Start/Stop pomodoro countdown timer</ul>
  <ul>Start break countdown timer automatically after pomodoro ﬁnished</ul>
 
+
 <h1>upcoming features</h1>
-
-
-<ul>Connect to Parse-Backend to persist data </ul>
 <ul> unit test cases</ul>
 
 
