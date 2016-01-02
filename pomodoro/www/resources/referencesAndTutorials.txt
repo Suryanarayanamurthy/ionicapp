@@ -1,1 +1,13 @@
 http://www.joshmorony.com/user-authentication-with-ionic-and-parse-part-2-facebook-login/
+https://github.com/htmlxprs/ionic-parse-todo-app
+https://github.com/ekaputra07/ionic-parse-todo
+https://blog.nraboy.com/2015/04/use-parse-core-in-ionic-framework-mobile-apps/
+https://parse.com/tutorials/todo-app-with-javascript
+http://www.clearlyinnovative.com/ionic-framework-facebook-login-with-parse
+https://parse.com/docs/js/guide#objects-retrieving-objects
+https://parse.com/docs/js/guide#objects-retrieving-objects
+http://moduscreate.com/the-magic-of-angular-js-two-way-binding/
+http://embed.plnkr.co/xrTltf/
+http://plnkr.co/edit/cqx77pb4CDI2TXyESYGN?p=preview
+https://docs.angularjs.org/guide/scope
+http://emilyporta.com/how-to-actually-run-the-chrome-web-inspector-with-an-emulated-android-device/

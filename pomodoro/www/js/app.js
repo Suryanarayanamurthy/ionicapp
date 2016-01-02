@@ -9,8 +9,7 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
 //
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
-      //initilize parse.
-      Parse.initialize("F5XCrepedBGlhJ9Mv7EvAIxY3ESu4bsWLbkWq52h", "eWrNoxx37SIRrB2KtFWsMKe3I05auYQUNnrTV07p");
+      
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
@@ -19,6 +18,7 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+      
   });
 })
 
@@ -88,7 +88,9 @@ angular.module('PomodoroApp', ['ionic','ionic.service.core','PomodoroApp.service
 
 angular.module('PomodoroApp.services', [])
   .factory('ListFactory', function($ionicPopup,$timeout,$q) {
-
+    
+    //initilize parse.
+      Parse.initialize("F5XCrepedBGlhJ9Mv7EvAIxY3ESu4bsWLbkWq52h", "eWrNoxx37SIRrB2KtFWsMKe3I05auYQUNnrTV07p");
     var list = [];
     var parseObjId;
     var ParseObjIdStore =  localStorage.getItem("objID");
@@ -197,7 +199,7 @@ angular.module('PomodoroApp.services', [])
          getListAsync: function(){
               return $q(function(resolve, reject) {
                           //list is available locally.
-                   if (listStore != null && listStore != '') {
+                   if (list != null) {
           resolve(list);
         }        
                   // else try to get it from the Parse using the object id
@@ -230,8 +232,10 @@ angular.module('PomodoroApp.services', [])
   success: function(newObj) {
     // The object was saved successfully.
       parseObjId = newObj.id;
+      list =[];
      localStorage.setItem("objID",parseObjId);
-      resolve([]);
+       localStorage.setItem("list", angular.toJson(list));
+      resolve(list);
       
   },
   error: function(newObj, error) {
