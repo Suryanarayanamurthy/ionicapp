@@ -1,6 +1,30 @@
 A pomodoro timer is a tool to be used when executing the Pomodoro Technique for time management and productivity gain. To learn more about the Pomodoro Technique, visit: http://pomodorotechnique.com/
 <hr>
 
+<ul>Clock page:
+<li>select the tasks that you are working now on the select controll available on the top right corner.</li>
+<li>Click on the timer displayed to toggle between play and pause the timer.</li>
+<li>work during the work secession and take a break during the timer secession.</li>
+<li>A long break is given after completing 4 cycles of Pomodoro.</li>
+<li>for best performance use the default time settings.</li>
+but nevertheless you can adjust the time setting for work, break and long break in the Adjustable settings.
+<ul>Sound setting:
+<li>Alarm: played evertime the current secession is over</li>
+<li>ticking: ticking sound for every second</li>
+<li><ul>binaural beats: 
+<li>playes Gamma waves for high concentration during work secession.</li>
+<li>playes High Alpha waves, for active relaxation during short break.</li>
+<li>playes delta waves for, long break for real relaxation </li>
+</ul></li>
+</ul>
+</ul>
+
+<ul>Karma Index:
+<li>you can view/add/edit/delete your tasks on the Karma page.</li>
+<li>sync your task list on the cloud by doing pull to refresh on the Karma Index page.</li>
+</ul>
+
+
 <h1>existing features:</h1>
 <h3>Clean Code.</h3>
 <h2>Adjustable Settings –</h2>
