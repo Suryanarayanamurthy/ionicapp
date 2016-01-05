@@ -1,6 +1,8 @@
 A pomodoro timer is a tool to be used when executing the Pomodoro Technique for time management and productivity gain. To learn more about the Pomodoro Technique, visit: http://pomodorotechnique.com/
 <hr>
-
+<br>
+https://huboard.com/Suryanarayanamurthy/ionicapp
+<hr>
 <ul>Clock page:
 <li>select the tasks that you are working now on the select controll available on the top right corner.</li>
 <li>Click on the timer displayed to toggle between play and pause the timer.</li>
