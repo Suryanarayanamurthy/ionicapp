@@ -1,8 +1,0 @@
-{
-    "jscodehints.detectedExclusions": [
-        "D:/Documents/GitHub/ionicapp/pomodoro/www/src/vendor/angular.min.js",
-        "D:/Documents/GitHub/ionicapp/pomodoro/www/js/app.js",
-        "D:/Documents/GitHub/ionicapp/pomodoro/plugins/cordova-plugin-splashscreen/src/blackberry10/index.js",
-        "D:/Documents/GitHub/ionicapp/pomodoro/plugins/cordova-plugin-device/tests/tests.js"
-    ]
-}
